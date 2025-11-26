@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## ✨ Blog SSG MDX + Supabase
 
-## Getting Started
+Fitur utama:
 
-First, run the development server:
+- SSG (ISR 60 detik) untuk homepage & detail artikel (`/` & `/posts/[slug]`)
+- Editor MDX dengan preview realtime (menggunakan `@mdx-js/mdx`)
+- Draft & publish workflow lengkap, jadwal `published_at`
+- Upload cover langsung ke Supabase Storage bucket
+- Tags & kategori dengan filter interaktif
+- Admin dashboard + statistik + tabel manajemen konten
+- Auth Supabase (email/password) + proteksi layout dashboard
+- Tabel `profiles` untuk identitas penulis + relasi ke artikel
+- Halaman signup opsional (dikendalikan lewat ENV) untuk perekrutan kontributor
+- Integrasi Shadcn UI + framer-motion untuk UI yang halus
+
+## 🚀 Menjalankan lokal
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# buka http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔐 Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Buat file `.env.local` (contoh):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=public-anon-key
+NEXT_PUBLIC_SUPABASE_BUCKET=blog-media
+NEXT_PUBLIC_ENABLE_SIGNUP=false
+```
 
-## Learn More
+> Pastikan bucket `blog-media` sudah dibuat di Supabase Storage dan public.
 
-To learn more about Next.js, take a look at the following resources:
+## 🗄️ Skema database
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Gunakan `supabase/schema.sql` untuk membuat tabel `profiles`, `posts`, trigger `updated_at`, dan kebijakan RLS. Kebijakan default:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- publik hanya bisa `select` artikel `status = 'published'`
+- user authenticated bisa CRUD (atur lagi sesuai kebutuhan, mis. hanya `role = 'admin'`)
+- tabel `profiles` bisa dibaca publik, tapi hanya pemilik akun yang boleh insert/update barisnya sendiri
 
-## Deploy on Vercel
+> Jika sudah pernah membuat tabel `posts` sebelumnya, jalankan ulang skrip untuk memastikan foreign key `author_id` sekarang menunjuk ke `public.profiles`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📦 Struktur penting
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/page.tsx` — landing + list blog (SSG)
+- `app/posts/[slug]/page.tsx` — halaman detail MDX (SSG)
+- `app/(dashboard)/dashboard/*` — dashboard admin (proteksi Supabase auth)
+- `app/login` — form login
+- `components/editor/*` — editor MDX, live preview, uploader
+- `lib/data/posts.ts` — query & helper Supabase
+- `lib/mdx.tsx` — renderer MDX untuk server component
+
+## ✅ Workflow konten
+
+1. Login via `/login`
+2. Buka `/dashboard/editor` untuk buat draft
+3. Tulis MDX, cek preview realtime, upload cover
+4. Simpan sebagai draft atau langsung publish
+5. Halaman publik otomatis revalidate setiap 60 detik
+
+## 🧰 Tools
+
+- Next.js 16 App Router + Server Actions
+- Supabase (`@supabase/ssr`) untuk auth, database, storage
+- Shadcn UI (tailwind v4 siap pakai)
+- Framer Motion untuk animasi
+- Zod + React Hook Form untuk validasi editor
+- Toggle signup lewat `NEXT_PUBLIC_ENABLE_SIGNUP` (true untuk menampilkan halaman `/signup`)
+
+Selamat ngoprek ✌️
