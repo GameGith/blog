@@ -34,7 +34,7 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      className="relative h-10 w-10 overflow-hidden"
+      className="relative h-10 w-10 overflow-hidden rounded-full"
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >

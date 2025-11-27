@@ -147,6 +147,7 @@ export function Navbar() {
                 </span>
               </motion.button>
 
+              <ThemeToggle />
               <Link href="/login">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -157,7 +158,6 @@ export function Navbar() {
                   <LogIn className="h-4 w-4" />
                 </motion.button>
               </Link>
-              <ThemeToggle />
             </div>
           </div>
         </motion.div>
@@ -191,6 +191,14 @@ export function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="flex items-center gap-2">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                // @ts-ignore
+                onClick={() => window.toggleCommandMenu?.()}
+                className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <Search className="h-5 w-5" />
+              </motion.button>
               <ThemeToggle />
               <motion.button
                 whileTap={{ scale: 0.95 }}
