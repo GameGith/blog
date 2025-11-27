@@ -17,42 +17,43 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button
-        variant="ghost"
-        size="icon"
-        className="relative h-10 w-10 overflow-hidden"
+      <button
+        className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
         aria-label="Toggle theme"
         disabled
       >
-        <span className="sr-only">Toggle theme</span>
-        <Sun className="h-4 w-4 opacity-0" />
-      </Button>
+        <div className="relative h-5 w-5">
+          <Sun className="h-5 w-5 opacity-0" />
+        </div>
+      </button>
     );
   }
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="relative h-10 w-10 overflow-hidden rounded-full"
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="rounded-full bg-white/5 p-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
-      <motion.span
-        key={theme}
-        initial={{ y: 16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -16, opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="absolute inset-0 flex items-center justify-center"
-      >
-        {theme === "dark" ? (
-          <Moon className="h-4 w-4" />
-        ) : (
-          <Sun className="h-4 w-4" />
-        )}
-      </motion.span>
-    </Button>
+      <div className="relative h-5 w-5">
+        <motion.span
+          key={theme}
+          initial={{ y: 16, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -16, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          {theme === "dark" ? (
+            <Moon className="h-5 w-5" />
+          ) : (
+            <Sun className="h-5 w-5" />
+          )}
+        </motion.span>
+      </div>
+    </motion.button>
   );
 }
 

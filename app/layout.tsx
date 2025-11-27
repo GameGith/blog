@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { getSession } from "@/lib/auth";
+import { getSession, getCurrentProfile } from "@/lib/auth";
 import { AppProviders } from "@/components/providers/app-providers";
 import { Navbar } from "@/components/navbar";
 import { CommandMenu } from "@/components/command-menu";
@@ -58,6 +58,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSession();
+  const profile = session ? await getCurrentProfile() : null;
 
   return (
     <html lang="id" suppressHydrationWarning>
@@ -65,7 +66,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
       >
         <AppProviders session={session}>
-          <Navbar />
+          <Navbar session={session} profile={profile} />
           <CommandMenu />
           {children}
         </AppProviders>

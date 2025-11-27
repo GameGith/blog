@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, BookOpen, User, LogIn, Search, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { UserNavButton } from "./user-nav-button";
 
 const navItems = [
   { name: "Home", href: "/", icon: Home },
@@ -13,7 +14,12 @@ const navItems = [
   { name: "About", href: "https://mubarrok.my.id", icon: User },
 ];
 
-export function Navbar() {
+type NavbarProps = {
+  session?: any;
+  profile?: any;
+};
+
+export function Navbar({ session, profile }: NavbarProps = {}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("/");
@@ -138,7 +144,7 @@ export function Navbar() {
                 whileTap={{ scale: 0.95 }}
                 // @ts-ignore
                 onClick={() => window.toggleCommandMenu?.()}
-                className="group flex items-center gap-2 rounded-full bg-white/5 px-3 py-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+                className="group flex items-center gap-2 rounded-full bg-white/5 px-3 py-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
                 title="Cari (Ctrl+K)"
               >
                 <Search className="h-4 w-4" />
@@ -148,16 +154,26 @@ export function Navbar() {
               </motion.button>
 
               <ThemeToggle />
-              <Link href="/login">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
-                  title="Masuk ke Dashboard"
-                >
-                  <LogIn className="h-4 w-4" />
-                </motion.button>
-              </Link>
+              
+              {session ? (
+                <UserNavButton
+                  session={session}
+                  displayName={profile?.display_name}
+                  email={profile?.email}
+                  avatarUrl={profile?.avatar_url}
+                />
+              ) : (
+                <Link href="/login">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="rounded-full bg-white/5 p-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+                    title="Masuk ke Dashboard"
+                  >
+                    <LogIn className="h-4 w-4" />
+                  </motion.button>
+                </Link>
+              )}
             </div>
           </div>
         </motion.div>
