@@ -4,15 +4,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Shield, UserPlus } from "lucide-react";
 
 import { SIGNUP_ENABLED } from "@/lib/constants";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-border/40 bg-gradient-to-b from-background/80 via-primary/5 to-background/60 p-8 shadow-2xl">
-      <div className="absolute right-6 top-6">
-        <ThemeToggle />
-      </div>
       <div className="max-w-3xl space-y-6">
         <motion.p
           initial={{ opacity: 0, y: 8 }}

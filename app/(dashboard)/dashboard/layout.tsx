@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { requireAdmin, getCurrentProfile, getSession } from "@/lib/auth";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { UserNav } from "@/components/dashboard/user-nav";
 import { Button } from "@/components/ui/button";
 
@@ -36,7 +35,6 @@ export default async function DashboardLayout({
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             {session && (
               <UserNav
                 session={session}
