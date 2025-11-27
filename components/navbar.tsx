@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, BookOpen, User, LogIn, Menu, X } from "lucide-react";
+import { Home, BookOpen, User, LogIn, Search, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
   { name: "Home", href: "/", icon: Home },
-  { name: "Blog", href: "/blog", icon: BookOpen },
-  { name: "About", href: "/about", icon: User },
+  { name: "Posts", href: "/posts", icon: BookOpen },
+  { name: "About", href: "https://mubarrok.my.id", icon: User },
 ];
 
 export function Navbar() {
@@ -59,7 +59,7 @@ export function Navbar() {
             >
               <div className="relative h-8 w-8 overflow-hidden rounded-lg">
                 <Image
-                  src="/logo.png"
+                  src="/icon.png"
                   alt="Mubarrok Tech Logo"
                   width={32}
                   height={32}
@@ -133,6 +133,20 @@ export function Navbar() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                // @ts-ignore
+                onClick={() => window.toggleCommandMenu?.()}
+                className="group flex items-center gap-2 rounded-full bg-white/5 px-3 py-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+                title="Cari (Ctrl+K)"
+              >
+                <Search className="h-4 w-4" />
+                <span className="hidden text-xs text-gray-500 group-hover:text-gray-300 lg:inline-block">
+                  <kbd className="font-sans">Ctrl K</kbd>
+                </span>
+              </motion.button>
+
               <Link href="/login">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -162,7 +176,7 @@ export function Navbar() {
             <Link href="/" className="flex items-center gap-2">
               <div className="relative h-8 w-8 overflow-hidden rounded-lg">
                 <Image
-                  src="/logo.png"
+                  src="/icon.png"
                   alt="Mubarrok Tech Logo"
                   width={32}
                   height={32}
@@ -260,6 +274,21 @@ export function Navbar() {
                       <span className="font-medium">Login</span>
                     </Link>
                   </motion.div>
+                  {/* Search Button (Mobile) */}
+                  <motion.button
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: navItems.length * 0.1 + 0.1 }}
+                    // @ts-ignore
+                    onClick={() => {
+                      window.toggleCommandMenu?.();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-gray-300 transition-all hover:bg-white/5"
+                  >
+                    <Search className="h-5 w-5 text-gray-400" />
+                    <span className="font-medium">Search</span>
+                  </motion.button>
                 </div>
               </motion.div>
             )}

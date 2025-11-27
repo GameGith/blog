@@ -107,6 +107,51 @@ export const getPostById = cache(async (id: string) => {
   return data as BlogPost;
 });
 
+export const getPostsByCategory = cache(async (slug: string) => {
+  const supabase = await createSupabaseServerClient();
+  
+  // First get category id by slug
+  const { data: category } = await supabase
+    .from("categories")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+
+  if (!category) return [];
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_WITH_AUTHOR)
+    .eq("status", "published")
+    .eq("category_id", category.id)
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []) as BlogPost[];
+});
+
+export const getPostsByTag = cache(async (tag: string) => {
+  const supabase = await createSupabaseServerClient();
+  
+  // Supabase doesn't support array contains on text[] directly with simple filter easily for all cases,
+  // but .contains('tags', [tag]) works for array columns
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_WITH_AUTHOR)
+    .eq("status", "published")
+    .contains("tags", [tag])
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []) as BlogPost[];
+});
+
 export const getDashboardStats = cache(async (): Promise<DashboardStats> => {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase

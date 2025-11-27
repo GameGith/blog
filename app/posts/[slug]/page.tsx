@@ -142,6 +142,14 @@ export default async function PostDetailPage({
           {/* Content */}
           <div className="space-y-5 md:space-y-8">
             <div className="space-y-3">
+              {post.category && (
+                <Link
+                  href={`/categories/${post.category.slug}`}
+                  className="inline-flex items-center gap-x-1.5 text-sm font-medium text-teal-500 hover:text-teal-600 hover:underline"
+                >
+                  {post.category.name}
+                </Link>
+              )}
               <h1 className="text-2xl font-bold md:text-3xl">{post.title}</h1>
 
               {post.excerpt && (
@@ -171,9 +179,14 @@ export default async function PostDetailPage({
             {post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="rounded-full">
-                    {tag}
-                  </Badge>
+                  <Link key={tag} href={`/tags/${tag}`}>
+                    <Badge
+                      variant="secondary"
+                      className="rounded-full hover:bg-teal-500/10 hover:text-teal-500 transition-colors cursor-pointer"
+                    >
+                      #{tag}
+                    </Badge>
+                  </Link>
                 ))}
               </div>
             )}
