@@ -9,6 +9,7 @@ import { getPostBySlug, getPublishedPostsForBuild } from "@/lib/data/posts";
 import { MDXRenderer } from "@/lib/mdx";
 import { Badge } from "@/components/ui/badge";
 import { ShareButtons } from "@/components/blog/share-buttons";
+import { getImageUrl } from "@/lib/utils";
 
 type Params = {
   slug: string;
@@ -81,7 +82,7 @@ export default async function PostDetailPage({
                 {post.author?.avatar_url ? (
                   <Image
                     className="size-10 rounded-full object-cover"
-                    src={post.author.avatar_url}
+                    src={getImageUrl(post.author.avatar_url)!}
                     alt={authorName}
                     width={48}
                     height={48}
@@ -161,7 +162,7 @@ export default async function PostDetailPage({
               <figure>
                 <Image
                   className="w-full object-cover rounded-xl"
-                  src={post.cover_url}
+                  src={getImageUrl(post.cover_url)!}
                   alt={post.title}
                   width={800}
                   height={450}

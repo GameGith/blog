@@ -1,15 +1,11 @@
-import { getPublishedPosts } from "@/lib/data/posts";
+"use client";
+
 import { PostGrid } from "@/components/blog/post-grid";
+import { PostGridSkeleton } from "@/components/blog/post-skeleton";
+import { usePosts } from "@/hooks/use-posts";
 
-export const revalidate = 60;
-
-export const metadata = {
-  title: "Semua Artikel | Mubarrok Tech Blog",
-  description: "Jelajahi semua artikel tentang AI, Web Dev, dan teknologi terkini.",
-};
-
-export default async function PostsPage() {
-  const posts = await getPublishedPosts();
+export default function PostsPage() {
+  const { posts, isLoading, isError } = usePosts();
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 lg:px-8">
@@ -22,7 +18,15 @@ export default async function PostsPage() {
         </p>
       </div>
 
-      <PostGrid posts={posts} />
+      {isLoading && <PostGridSkeleton />}
+
+      {isError && (
+        <div className="rounded-2xl border border-destructive/50 bg-destructive/10 p-8 text-center text-sm text-destructive">
+          Gagal memuat artikel. Silakan refresh halaman.
+        </div>
+      )}
+
+      {!isLoading && !isError && posts && <PostGrid posts={posts} />}
     </main>
   );
 }

@@ -9,6 +9,7 @@ import { id } from "date-fns/locale";
 import type { BlogPost } from "@/types/blog";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getImageUrl } from "@/lib/utils";
 
 type Props = {
   post: BlogPost;
@@ -28,7 +29,7 @@ export function PostCard({ post, index }: Props) {
         <div className="relative h-48 w-full overflow-hidden">
           {post.cover_url ? (
             <Image
-              src={post.cover_url}
+              src={getImageUrl(post.cover_url)!}
               alt={post.title}
               fill
               sizes="(max-width:768px) 100vw, 33vw"

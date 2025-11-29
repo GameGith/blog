@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
       },
     ].filter(Boolean) as NonNullable<NextConfig["images"]>["remotePatterns"],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/cdn/:path*",
+        destination: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/:path*`,
+      },
+    ];
+  },
   experimental: {
     serverActions: {
       allowedOrigins: ["localhost"],
