@@ -95,115 +95,126 @@ export function PostTable({ posts }: Props) {
             className="md:max-w-xs"
           />
         </div>
-        <div className="rounded-xl border border-border/40">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Judul</TableHead>
-                <TableHead>Penulis</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Tags</TableHead>
-                <TableHead>Diperbarui</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((post) => (
-                <TableRow key={post.id}>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{post.title}</span>
-                      <span className="text-xs text-muted-foreground">
-                        /posts/{post.slug}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col text-sm">
-                      <span className="font-medium">
-                        {post.author?.display_name ??
-                          post.author?.email ??
-                          "Tidak diketahui"}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {post.author?.role ?? "-"}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        post.status === "published" ? "default" : "outline"
-                      }
-                    >
-                      {post.status === "published" ? "Published" : "Draft"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {post.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary">
-                          #{tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {formatDistanceToNow(new Date(post.updated_at), {
-                      addSuffix: true,
-                      locale: id,
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/editor/${post.id}`}>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          disabled={pending}
-                          onClick={() =>
-                            mutatePost(
-                              post,
-                              post.status === "published"
-                                ? "draft"
-                                : "published"
-                            )
-                          }
-                        >
-                          {post.status === "published"
-                            ? "Unpublish"
-                            : "Publish"}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-destructive focus:text-destructive"
-                          onClick={() => setDeletePost(post)}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Hapus
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {filtered.length === 0 && (
+        <div className="rounded-xl border border-border/40 overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-sm">
-                    Belum ada artikel
-                  </TableCell>
+                  <TableHead>Judul</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Penulis
+                  </TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden lg:table-cell">Tags</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Diperbarui
+                  </TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((post) => (
+                  <TableRow key={post.id}>
+                    <TableCell className="max-w-[150px] sm:max-w-[250px] md:max-w-[350px]">
+                      <div className="flex flex-col gap-1">
+                        <span
+                          className="font-medium truncate"
+                          title={post.title}
+                        >
+                          {post.title}
+                        </span>
+                        <span className="text-xs text-muted-foreground truncate">
+                          /posts/{post.slug}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <div className="flex flex-col text-sm">
+                        <span className="font-medium">
+                          {post.author?.display_name ??
+                            post.author?.email ??
+                            "Tidak diketahui"}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {post.author?.role ?? "-"}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          post.status === "published" ? "default" : "outline"
+                        }
+                      >
+                        {post.status === "published" ? "Published" : "Draft"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      <div className="flex flex-wrap gap-1">
+                        {post.tags.map((tag) => (
+                          <Badge key={tag} variant="secondary">
+                            #{tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                      {formatDistanceToNow(new Date(post.updated_at), {
+                        addSuffix: true,
+                        locale: id,
+                      })}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link href={`/dashboard/editor/${post.id}`}>
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Edit
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            disabled={pending}
+                            onClick={() =>
+                              mutatePost(
+                                post,
+                                post.status === "published"
+                                  ? "draft"
+                                  : "published"
+                              )
+                            }
+                          >
+                            {post.status === "published"
+                              ? "Unpublish"
+                              : "Publish"}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive focus:text-destructive"
+                            onClick={() => setDeletePost(post)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Hapus
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {filtered.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-sm">
+                      Belum ada artikel
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </>

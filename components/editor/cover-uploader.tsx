@@ -18,24 +18,20 @@ type Props = {
 export function CoverUploader({ value, onChange }: Props) {
   const { client, user } = useSupabase();
   const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-  const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  const processFile = async (file: File) => {
     // Validasi tipe file
     if (!file.type.startsWith("image/")) {
       toast.error("File harus berupa gambar");
-      event.target.value = "";
       return;
     }
 
     // Validasi ukuran file
     if (file.size > MAX_FILE_SIZE) {
       toast.error("Ukuran gambar maksimal 5MB");
-      event.target.value = "";
       return;
     }
 
@@ -76,13 +72,48 @@ export function CoverUploader({ value, onChange }: Props) {
       );
     } finally {
       setUploading(false);
-      event.target.value = "";
+    }
+  };
+
+  const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      await processFile(file);
+    }
+    event.target.value = "";
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processFile(file);
     }
   };
 
   return (
     <div className="space-y-4">
-      <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-border/60 bg-muted/20">
+      <div
+        className={`relative flex h-48 items-center justify-center overflow-hidden rounded-2xl border border-dashed transition-colors ${
+          isDragging
+            ? "border-primary bg-primary/10"
+            : "border-border/60 bg-muted/20"
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         {value ? (
           <Image
             src={value}
@@ -94,8 +125,13 @@ export function CoverUploader({ value, onChange }: Props) {
         ) : (
           <div className="flex flex-col items-center text-center text-sm text-muted-foreground">
             <ImagePlus className="mb-2 h-6 w-6" />
-            <p>Unggah cover</p>
+            <p>Drag & drop atau pilih file</p>
             <p className="mt-1 text-xs">Max 5MB</p>
+          </div>
+        )}
+        {uploading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         )}
       </div>
@@ -116,7 +152,6 @@ export function CoverUploader({ value, onChange }: Props) {
             toast.success("URL cover disalin");
           }}
         >
-          {uploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Salin URL
         </Button>
       </div>

@@ -10,7 +10,7 @@ export const postSchema = z
       .min(3)
       .optional()
       .or(z.literal("")),
-    excerpt: z.string().max(280).optional().or(z.literal("")),
+    excerpt: z.string().max(1000).optional().or(z.literal("")),
     content: z.string().min(1, "Konten tidak boleh kosong"),
     cover_url: z.string().url().optional().or(z.literal("")),
     tags: z.string().optional().or(z.literal("")),

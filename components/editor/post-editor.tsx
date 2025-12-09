@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
-import { CalendarIcon, Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -25,7 +25,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TagInput } from "@/components/editor/tag-input";
 import { CategorySelect } from "@/components/editor/category-select";
@@ -73,7 +72,6 @@ export function PostEditor({ post }: Props) {
 
   const tagsValue = useWatch({ control: form.control, name: "tags" });
   const contentValue = useWatch({ control: form.control, name: "content" });
-  const statusValue = useWatch({ control: form.control, name: "status" });
 
   const tags = useMemo(
     () =>
@@ -133,195 +131,195 @@ export function PostEditor({ post }: Props) {
   return (
     <Form {...form}>
       <form className="space-y-8">
-        <div className="flex flex-col gap-4 rounded-3xl border border-border/40 bg-card/60 p-6 shadow-lg lg:flex-row">
-          <div className="flex-1 space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  {post ? "Edit artikel" : "Buat artikel baru"}
-                </p>
-                <h2 className="text-2xl font-semibold tracking-tight">
-                  Studio Penulisan MDX
-                </h2>
-              </div>
-              <Badge variant="secondary" className="gap-1">
-                <Sparkles className="h-3.5 w-3.5" />
-                Live Preview
-              </Badge>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="secondary"
-                disabled={pending}
-                onClick={() => handleSubmit("draft")}
-              >
-                Simpan Draft
-              </Button>
-              <Button
-                type="button"
-                disabled={pending}
-                onClick={() => handleSubmit("published")}
-              >
-                {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Publikasikan
-              </Button>
-              {lastSaved && (
-                <span className="text-xs text-muted-foreground">
-                  Terakhir disimpan {format(lastSaved, "dd MMM yyyy HH:mm")}
-                </span>
+        <div className="flex flex-col gap-4 rounded-3xl border border-border/40 bg-card/60 p-6 shadow-lg lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-muted-foreground">
+                {post ? "Edit artikel" : "Buat artikel baru"}
+              </p>
+              {post?.status && (
+                <Badge
+                  variant={
+                    post.status === "published" ? "default" : "secondary"
+                  }
+                >
+                  {post.status === "published" ? "Published" : "Draft"}
+                </Badge>
               )}
             </div>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Studio Penulisan
+            </h2>
           </div>
-          <div className="flex items-center gap-3 rounded-2xl border border-border/40 px-4 py-2">
-            <span className="text-sm text-muted-foreground">Status</span>
-            <Switch
-              checked={statusValue === "published"}
-              onCheckedChange={(checked) =>
-                form.setValue("status", checked ? "published" : "draft")
-              }
-            />
-            <span className="text-sm font-medium">
-              {statusValue === "published" ? "Published" : "Draft"}
-            </span>
+          <div className="flex flex-wrap items-center gap-2">
+            {lastSaved && (
+              <span className="mr-2 text-xs text-muted-foreground">
+                Disimpan {format(lastSaved, "HH:mm")}
+              </span>
+            )}
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={pending}
+              onClick={() => handleSubmit("draft")}
+            >
+              Simpan Draft
+            </Button>
+            <Button
+              type="button"
+              disabled={pending}
+              onClick={() => handleSubmit("published")}
+            >
+              {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Publikasikan
+            </Button>
           </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,420px)]">
-          <Card className="border-border/30 bg-background/80">
-            <CardHeader>
-              <CardTitle>Informasi Konten</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Judul</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Judul utama artikel" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Slug</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="otomatis jika dikosongkan"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="excerpt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ringkasan</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        rows={3}
-                        placeholder="Deskripsi singkat untuk meta / kartu"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="category_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kategori</FormLabel>
-                    <CategorySelect
-                      value={field.value || undefined}
-                      onChange={(value) => field.onChange(value)}
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="tags"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tags</FormLabel>
-                    <FormControl>
-                      <TagInput
-                        value={tags}
-                        suggestions={TAG_SUGGESTIONS}
-                        onChange={(items) => field.onChange(items.join(","))}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="cover_url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cover</FormLabel>
-                    <FormControl>
-                      <CoverUploader
-                        value={field.value}
-                        onChange={(url) => field.onChange(url)}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+        <div className="grid gap-6 lg:grid-cols-[1fr_350px]">
+          <div className="space-y-6">
+            <Card className="border-border/30 bg-background/80">
+              <CardHeader>
+                <CardTitle>Detail Konten</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Judul Artikel</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Judul menarik..."
+                          className="text-lg font-medium"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="grid gap-4 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="slug"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Slug URL</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="otomatis-jika-kosong"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="category_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Kategori</FormLabel>
+                        <CategorySelect
+                          value={field.value || undefined}
+                          onChange={(value) => field.onChange(value)}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="excerpt"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ringkasan Singkat</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={2}
+                          placeholder="Deskripsi untuk SEO dan kartu artikel..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tags</FormLabel>
+                      <FormControl>
+                        <TagInput
+                          value={tags}
+                          suggestions={TAG_SUGGESTIONS}
+                          onChange={(items) => field.onChange(items.join(","))}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          </div>
 
-          <Card className="border-border/30 bg-background/80">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Penjadwalan</CardTitle>
-              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <FormField
-                control={form.control}
-                name="published_at"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Publish at (opsional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="datetime-local"
-                        value={field.value ?? ""}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <p className="text-xs text-muted-foreground">
-                Kosongkan jika ingin memakai waktu ketika tombol publish
-                ditekan.
-              </p>
-            </CardContent>
-          </Card>
+          <div className="space-y-6">
+            <Card className="border-border/30 bg-background/80">
+              <CardHeader>
+                <CardTitle>Pengaturan Publikasi</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="published_at"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Jadwal Publish</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="datetime-local"
+                          value={field.value ?? ""}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <p className="text-[0.8rem] text-muted-foreground">
+                        Biarkan kosong untuk publish sekarang.
+                      </p>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="cover_url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cover Image</FormLabel>
+                      <FormControl>
+                        <CoverUploader
+                          value={field.value}
+                          onChange={(url) => field.onChange(url)}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           <Card className="border-border/30 bg-background/80">
             <CardHeader>
-              <CardTitle>MDX Editor</CardTitle>
+              <CardTitle>Editor MDX</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <FormField
                 control={form.control}
                 name="content"
@@ -329,7 +327,7 @@ export function PostEditor({ post }: Props) {
                   <FormItem>
                     <FormControl>
                       <Textarea
-                        className="min-h-[400px] font-mono"
+                        className="min-h-[500px] resize-y border-0 focus-visible:ring-0 font-mono p-4"
                         placeholder={`## Mulai menulis\n\n> MDX mendukung komponen, markdown, dan lainnya.`}
                         {...field}
                       />
@@ -340,16 +338,17 @@ export function PostEditor({ post }: Props) {
               />
             </CardContent>
           </Card>
+
           <Card className="border-primary/40 bg-linear-to-b from-background to-primary/5">
             <CardHeader>
-              <div>
+              <div className="flex items-center justify-between">
                 <CardTitle>Preview Realtime</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Render instan untuk melihat tampilan MDX sebelum publish.
-                </p>
+                <Badge variant="outline" className="gap-1">
+                  <Sparkles className="h-3 w-3" /> Live
+                </Badge>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={contentValue}

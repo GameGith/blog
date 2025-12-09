@@ -89,68 +89,74 @@ export function CategoriesTable({ categories }: Props) {
             Tambah Kategori
           </Button>
         </div>
-        <div className="rounded-xl border border-border/40">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nama</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Deskripsi</TableHead>
-                <TableHead>Dibuat</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {categories.map((category) => (
-                <TableRow key={category.id}>
-                  <TableCell className="font-medium">{category.name}</TableCell>
-                  <TableCell className="font-mono text-sm text-muted-foreground">
-                    {category.slug}
-                  </TableCell>
-                  <TableCell className="max-w-xs truncate text-sm text-muted-foreground">
-                    {category.description || "-"}
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {formatDistanceToNow(new Date(category.created_at), {
-                      addSuffix: true,
-                      locale: id,
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => setEditCategory(category)}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-destructive focus:text-destructive"
-                          onClick={() => setDeleteCategory(category)}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Hapus
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {categories.length === 0 && (
+        <div className="rounded-xl border border-border/40 overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-sm">
-                    Belum ada kategori
-                  </TableCell>
+                  <TableHead>Nama</TableHead>
+                  <TableHead className="hidden md:table-cell">Slug</TableHead>
+                  <TableHead className="hidden lg:table-cell">
+                    Deskripsi
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell">Dibuat</TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell className="font-medium">
+                      {category.name}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell font-mono text-sm text-muted-foreground">
+                      {category.slug}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell max-w-xs truncate text-sm text-muted-foreground">
+                      {category.description || "-"}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                      {formatDistanceToNow(new Date(category.created_at), {
+                        addSuffix: true,
+                        locale: id,
+                      })}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => setEditCategory(category)}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive focus:text-destructive"
+                            onClick={() => setDeleteCategory(category)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Hapus
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {categories.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-sm">
+                      Belum ada kategori
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </>

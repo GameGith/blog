@@ -9,24 +9,7 @@ import rehypeSlug from "rehype-slug";
 import { motion } from "framer-motion";
 
 import { Skeleton } from "@/components/ui/skeleton";
-
-const components = {
-  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2
-      className="mt-8 scroll-m-20 text-3xl font-bold tracking-tight"
-      {...props}
-    />
-  ),
-  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 className="mt-6 scroll-m-20 text-2xl font-semibold" {...props} />
-  ),
-  p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="leading-7 [&:not(:first-child)]:mt-4" {...props} />
-  ),
-  code: (props: React.HTMLAttributes<HTMLElement>) => (
-    <code className="rounded-lg bg-muted px-2 py-1 text-sm" {...props} />
-  ),
-};
+import { mdxComponents } from "@/components/mdx-components";
 
 export function MdxLivePreview({ value }: { value: string }) {
   const [Content, setContent] = useState<ComponentType | null>(null);
@@ -100,10 +83,9 @@ export function MdxLivePreview({ value }: { value: string }) {
       transition={{ duration: 0.2 }}
       className="prose prose-neutral dark:prose-invert max-w-none"
     >
-      <MDXProvider components={components}>
+      <MDXProvider components={mdxComponents}>
         <Content />
       </MDXProvider>
     </motion.div>
   );
 }
-

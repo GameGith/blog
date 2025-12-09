@@ -52,26 +52,19 @@ export function PostCard({ post, index }: Props) {
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
             {post.category?.name || "Artikel"}
           </p>
-          <h3 className="text-xl font-semibold leading-tight tracking-tight">
-            {post.title}
-          </h3>
-          <p className="text-sm text-muted-foreground">
+          <Link href={`/posts/${post.slug}`}>
+            <h3 className="text-xl font-semibold leading-tight tracking-tight transition-colors hover:text-primary">
+              {post.title}
+            </h3>
+          </Link>
+          <p className="line-clamp-3 text-sm text-muted-foreground">
             {post.excerpt || "Belum ada ringkasan singkat."}
           </p>
-          {post.author && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="font-medium text-foreground">
-                {post.author.display_name ?? post.author.email}
-              </span>
-              <span>•</span>
-              <span>{post.author.role}</span>
-            </div>
-          )}
         </CardContent>
         <CardFooter className="flex items-center justify-between border-t border-border/40 p-5 text-sm text-muted-foreground">
           <div>
             {post.published_at
-              ? format(new Date(post.published_at), "dd MMM yyyy", {
+              ? format(new Date(post.published_at), "dd MMM yyyy, HH:mm", {
                   locale: id,
                 })
               : "Draft"}
