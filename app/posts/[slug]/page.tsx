@@ -277,7 +277,7 @@ export default async function PostDetailPage({
               title="Views"
             >
               <Eye className="size-4" />
-              <span className="hidden sm:inline">{post.views || 0}</span>
+              <span className="inline">{post.views || 0}</span>
             </div>
 
             <div className="block h-3 border-e border-border mx-3"></div>
