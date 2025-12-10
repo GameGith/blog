@@ -1,7 +1,12 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { requireAdmin, getCurrentProfile, getSession } from "@/lib/auth";
 import { ProfileForm } from "@/components/dashboard/profile-form";
+
+export const metadata: Metadata = {
+  title: "Profil Saya",
+};
 
 export default async function ProfilePage() {
   await requireAdmin();

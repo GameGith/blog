@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth";
 import {
   Card,
@@ -6,6 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Pengaturan",
+};
 
 export default async function SettingsPage() {
   await requireAdmin();

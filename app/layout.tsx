@@ -18,7 +18,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mubarrok Tech Blog | AI, Web Dev & Tech Terkini",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  title: {
+    default: "Mubarrok Tech Blog | AI, Web Dev & Tech Terkini",
+    template: "%s | Mubarrok Tech Blog",
+  },
   description:
     "Jelajahi dunia teknologi terbaru: AI, Machine Learning, Web Development, Cloud Computing, dan tren tech masa depan. Tutorial, insight, dan review mendalam untuk developer & tech enthusiast.",
   keywords: [
@@ -36,9 +40,11 @@ export const metadata: Metadata = {
     "MDX",
   ],
   authors: [{ name: "Mubarrok", url: "https://instagram.com/hsnmbrr" }],
+  creator: "Mubarrok",
   openGraph: {
     type: "website",
     locale: "id_ID",
+    url: "/",
     title: "Mubarrok Tech Blog - AI, Web Dev & Teknologi Terkini",
     description:
       "Blog teknologi tentang AI, Machine Learning, Web Development, dan tren tech terbaru. Tutorial dan insight untuk developer.",
@@ -49,6 +55,18 @@ export const metadata: Metadata = {
     title: "Mubarrok Tech Blog - AI & Tech Terkini",
     description:
       "Jelajahi AI, Machine Learning, Web Development, dan teknologi masa depan",
+    creator: "@hsnmbrr",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

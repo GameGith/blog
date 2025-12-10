@@ -1,6 +1,11 @@
+import { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth";
 import { getCategoriesAction } from "@/app/(dashboard)/dashboard/_actions/categories";
 import { CategoriesTable } from "@/components/dashboard/categories-table";
+
+export const metadata: Metadata = {
+  title: "Kelola Kategori",
+};
 
 export default async function CategoriesPage() {
   await requireAdmin();

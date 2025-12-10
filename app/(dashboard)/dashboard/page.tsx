@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { ArrowUpRight, PenSquare } from "lucide-react";
+import { Metadata } from "next";
 
 import { getAllPosts, getDashboardStats } from "@/lib/data/posts";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { DraftList } from "@/components/dashboard/draft-list";
 import { PostTable } from "@/components/dashboard/post-table";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 export const dynamic = "force-dynamic";
 

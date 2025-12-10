@@ -1,18 +1,46 @@
-"use client";
+import { Metadata } from "next";
+import { getCategoryBySlug } from "@/lib/data/categories";
+import { CategoryPostList } from "@/components/blog/category-post-list";
 
-import { useParams } from "next/navigation";
-import { usePostsByCategory } from "@/hooks/use-posts";
-import { PostGrid } from "@/components/blog/post-grid";
-import { PostGridSkeleton } from "@/components/blog/post-skeleton";
+type Params = {
+  slug: string;
+};
 
-export default function CategoryPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const { posts, isLoading, isError } = usePostsByCategory(slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const category = await getCategoryBySlug(slug);
 
-  // Get category name from first post (if available)
-  const categoryName = posts?.[0]?.category?.name || slug;
-  const categoryDescription = posts?.[0]?.category?.description;
+  const title = category?.name || slug;
+  const description = category?.description || `Artikel terkini seputar ${title}`;
+
+  return {
+    title: `Kategori: ${title}`,
+    description,
+    openGraph: {
+      title: `Kategori: ${title}`,
+      description,
+    },
+    twitter: {
+      title: `Kategori: ${title}`,
+      description,
+    },
+  };
+}
+
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { slug } = await params;
+  const category = await getCategoryBySlug(slug);
+
+  const categoryName = category?.name || slug;
+  const categoryDescription = category?.description;
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 lg:px-8">
@@ -25,15 +53,7 @@ export default function CategoryPage() {
         )}
       </div>
 
-      {isLoading && <PostGridSkeleton />}
-
-      {isError && (
-        <div className="rounded-2xl border border-destructive/50 bg-destructive/10 p-8 text-center text-sm text-destructive">
-          Gagal memuat artikel. Silakan refresh halaman.
-        </div>
-      )}
-
-      {!isLoading && !isError && posts && <PostGrid posts={posts} />}
+      <CategoryPostList slug={slug} />
     </main>
   );
 }

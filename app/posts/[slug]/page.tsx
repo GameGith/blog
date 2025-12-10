@@ -41,9 +41,37 @@ export async function generateMetadata({
     return {};
   }
 
+  const ogImage = getImageUrl(post.cover_url);
+  const publishedTime = post.published_at || post.created_at;
+
   return {
     title: post.title,
     description: post.excerpt ?? post.title,
+    keywords: post.tags,
+    authors: [{ name: post.author?.display_name || "Mubarrok" }],
+    openGraph: {
+      title: post.title,
+      description: post.excerpt ?? post.title,
+      type: "article",
+      publishedTime,
+      authors: [post.author?.display_name || "Mubarrok"],
+      images: ogImage
+        ? [
+            {
+              url: ogImage,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt ?? post.title,
+      images: ogImage ? [ogImage] : undefined,
+    },
   };
 }
 
