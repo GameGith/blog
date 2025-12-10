@@ -109,7 +109,7 @@ export const getPostById = cache(async (id: string) => {
 
 export const getPostsByCategory = cache(async (slug: string) => {
   const supabase = await createSupabaseServerClient();
-  
+
   // First get category id by slug
   const { data: category } = await supabase
     .from("categories")
@@ -135,7 +135,7 @@ export const getPostsByCategory = cache(async (slug: string) => {
 
 export const getPostsByTag = cache(async (tag: string) => {
   const supabase = await createSupabaseServerClient();
-  
+
   // Supabase doesn't support array contains on text[] directly with simple filter easily for all cases,
   // but .contains('tags', [tag]) works for array columns
   const { data, error } = await supabase
@@ -229,9 +229,18 @@ export async function upsertPost(input: PostFormValues) {
     author_id: session.user?.id ?? null,
   };
 
+  // Generate random stats for new posts
+  // Likes: 0 - 500
+  // Views: 500 - 1000
+  const insertPayload = {
+    ...base,
+    likes: Math.floor(Math.random() * 501),
+    views: Math.floor(Math.random() * (1000 - 500 + 1)) + 500,
+  };
+
   const query = postId
     ? supabase.from("posts").update(base).eq("id", postId).select().single()
-    : supabase.from("posts").insert(base).select().single();
+    : supabase.from("posts").insert(insertPayload).select().single();
 
   const { data, error } = await query;
 
@@ -250,3 +259,23 @@ export async function deletePost(id: string) {
     throw new Error(error.message);
   }
 }
+
+export const getRelatedPosts = cache(async (currentSlug: string, limit = 6) => {
+  const supabase = await createSupabaseServerClient();
+
+  // Fetch more posts than needed to randomize
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_WITH_AUTHOR)
+    .eq("status", "published")
+    .neq("slug", currentSlug)
+    .limit(20);
+
+  if (error) {
+    return [];
+  }
+
+  // Shuffle array
+  const shuffled = (data || []).sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, limit) as BlogPost[];
+});

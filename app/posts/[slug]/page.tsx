@@ -1,14 +1,21 @@
 import { notFound } from "next/navigation";
-import { Heart, MessageCircle } from "lucide-react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 
-import { getPostBySlug, getPublishedPostsForBuild } from "@/lib/data/posts";
+import {
+  getPostBySlug,
+  getPublishedPostsForBuild,
+  getRelatedPosts,
+} from "@/lib/data/posts";
 import { MDXRenderer } from "@/lib/mdx";
 import { Badge } from "@/components/ui/badge";
 import { ShareButtons } from "@/components/blog/share-buttons";
+import { LikeButton } from "@/components/blog/like-button";
+import { ViewCounter } from "@/components/blog/view-counter";
+import { RelatedPosts } from "@/components/blog/related-posts";
 import { getImageUrl } from "@/lib/utils";
 
 type Params = {
@@ -51,6 +58,8 @@ export default async function PostDetailPage({
     notFound();
   }
 
+  const relatedPosts = await getRelatedPosts(slug);
+
   const authorName =
     post.author?.display_name ?? post.author?.email ?? "Penulis tamu";
 
@@ -85,6 +94,7 @@ export default async function PostDetailPage({
 
   return (
     <>
+      <ViewCounter slug={post.slug} />
       {/* Blog Article */}
       <div className="max-w-5xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
         <div className="max-w-4xl mx-auto">
@@ -222,31 +232,25 @@ export default async function PostDetailPage({
       </div>
       {/* End Blog Article */}
 
+      <RelatedPosts posts={relatedPosts} />
+
       {/* Sticky Share Group */}
       <div className="sticky bottom-6 inset-x-0 text-center z-50">
         <div className="inline-block bg-background border border-border shadow-lg rounded-full py-3 px-4">
           <div className="flex items-center gap-x-1.5">
             {/* Like Button */}
-            <button
-              type="button"
-              className="flex items-center gap-x-2 text-sm text-muted-foreground hover:text-foreground transition"
-              title="Like"
-            >
-              <Heart className="size-4" />
-              <span className="hidden sm:inline">0</span>
-            </button>
+            <LikeButton slug={post.slug} initialLikes={post.likes || 0} />
 
             <div className="block h-3 border-e border-border mx-3"></div>
 
-            {/* Comment Button */}
-            <button
-              type="button"
-              className="flex items-center gap-x-2 text-sm text-muted-foreground hover:text-foreground transition"
-              title="Comment"
+            {/* View Counter */}
+            <div
+              className="flex items-center gap-x-2 text-sm text-muted-foreground"
+              title="Views"
             >
-              <MessageCircle className="size-4" />
-              <span className="hidden sm:inline">0</span>
-            </button>
+              <Eye className="size-4" />
+              <span className="hidden sm:inline">{post.views || 0}</span>
+            </div>
 
             <div className="block h-3 border-e border-border mx-3"></div>
 

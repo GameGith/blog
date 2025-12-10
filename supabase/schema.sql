@@ -31,6 +31,8 @@ create table if not exists public.posts (
   category_id uuid references public.categories (id) on delete set null,
   status text not null default 'draft' check (status in ('draft', 'published')),
   author_id uuid references public.profiles (id) on delete set null,
+  views integer default 0,
+  likes integer default 0,
   published_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

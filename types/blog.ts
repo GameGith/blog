@@ -31,6 +31,8 @@ export type BlogPost = {
   category_id: string | null;
   category?: Category | null;
   status: PostStatus;
+  views: number;
+  likes: number;
   published_at: string | null;
   created_at: string;
   updated_at: string;

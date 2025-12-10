@@ -11,7 +11,10 @@ type Props = {
 export function PostGrid({ posts }: Props) {
   return (
     <section>
-      <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        layout
+        className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+      >
         {posts.map((post, index) => (
           <PostCard key={post.id} post={post} index={index} />
         ))}
