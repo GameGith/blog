@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { getSession, getCurrentProfile } from "@/lib/auth";
 import { AppProviders } from "@/components/providers/app-providers";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { CommandMenu } from "@/components/command-menu";
 import "./globals.css";
 
@@ -18,7 +19,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://blog.mubarrok.my.id"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://blog.mubarrok.my.id"
+  ),
   title: {
     default: "Mubarrok Tech Blog | AI, Web Dev & Tech Terkini",
     template: "%s | Mubarrok Tech Blog",
@@ -89,12 +92,13 @@ export default async function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} flex flex-col bg-background text-foreground antialiased`}
       >
         <AppProviders session={session}>
           <Navbar session={session} profile={profile} />
           <CommandMenu />
-          {children}
+          <main className="flex-1">{children}</main>
+          <Footer />
         </AppProviders>
       </body>
     </html>
