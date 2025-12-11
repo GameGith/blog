@@ -91,6 +91,13 @@ export default async function RootLayout({
 
   return (
     <html lang="id" suppressHydrationWarning>
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7845294761182815"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col bg-background text-foreground antialiased`}
       >
