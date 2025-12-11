@@ -55,6 +55,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime,
       authors: [post.author?.display_name || "Mubarrok"],
+      url: `/posts/${slug}`,
       images: ogImage
         ? [
             {
@@ -117,7 +118,7 @@ export default async function PostDetailPage({
   const displayDate = isEdited ? updatedDate : publishedDate;
 
   const postUrl = `${
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_SITE_URL
   }/posts/${post.slug}`;
 
   return (

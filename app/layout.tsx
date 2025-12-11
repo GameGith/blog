@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://blog.mubarrok.my.id"),
   title: {
     default: "Mubarrok Tech Blog | AI, Web Dev & Tech Terkini",
     template: "%s | Mubarrok Tech Blog",
@@ -44,11 +44,19 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "/",
+    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://blog.mubarrok.my.id",
     title: "Mubarrok Tech Blog - AI, Web Dev & Teknologi Terkini",
     description:
       "Blog teknologi tentang AI, Machine Learning, Web Development, dan tren tech terbaru. Tutorial dan insight untuk developer.",
     siteName: "Mubarrok Tech Blog",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Mubarrok Tech Blog",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
