@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { id } from "date-fns/locale";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Upload, Download } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -189,9 +189,17 @@ export function PostTable({ posts }: Props) {
                               )
                             }
                           >
-                            {post.status === "published"
-                              ? "Unpublish"
-                              : "Publish"}
+                            {post.status === "published" ? (
+                              <>
+                                <Download className="mr-2 h-4 w-4" />
+                                Unpublish
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="mr-2 h-4 w-4" />
+                                Publish
+                              </>
+                            )}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="text-destructive focus:text-destructive"

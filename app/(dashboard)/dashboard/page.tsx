@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ArrowUpRight, PenSquare } from "lucide-react";
 import { Metadata } from "next";
 
-import { getAllPosts, getDashboardStats } from "@/lib/data/posts";
+import { getAllPosts, getDashboardStats, getTotalTags } from "@/lib/data/posts";
+import { getTotalCategories } from "@/lib/data/categories";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { DraftList } from "@/components/dashboard/draft-list";
 import { PostTable } from "@/components/dashboard/post-table";
@@ -15,11 +16,16 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [stats, posts] = await Promise.all([getDashboardStats(), getAllPosts()]);
+  const [stats, posts, totalCategories, totalTags] = await Promise.all([
+    getDashboardStats(),
+    getAllPosts(),
+    getTotalCategories(),
+    getTotalTags(),
+  ]);
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl border border-border/40 bg-gradient-to-br from-background/70 via-background/50 to-primary/5 p-6 shadow-lg">
+      <section className="rounded-3xl border border-border/40 bg-linear-to-br from-background/70 via-background/50 to-primary/5 p-6 shadow-lg">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-primary">
@@ -42,7 +48,11 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <StatsCards stats={stats} />
+      <StatsCards
+        stats={stats}
+        totalCategories={totalCategories}
+        totalTags={totalTags}
+      />
 
       <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
         <PostTable posts={posts} />
@@ -64,4 +74,3 @@ export default async function DashboardPage() {
     </div>
   );
 }
-

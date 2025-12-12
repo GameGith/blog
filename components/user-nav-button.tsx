@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Settings, User, LayoutDashboard, FileEdit, FolderOpen } from "lucide-react";
+import { LogOut, Settings, User, LayoutDashboard, FileEdit } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -104,13 +104,6 @@ export function UserNavButton({ session, displayName, email, avatarUrl }: Props)
         >
           <FileEdit className="mr-2 h-4 w-4" />
           <span>Tulis Baru</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => router.push("/dashboard/categories")}
-          className="cursor-pointer"
-        >
-          <FolderOpen className="mr-2 h-4 w-4" />
-          <span>Kategori</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

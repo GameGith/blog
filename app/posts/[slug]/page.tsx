@@ -262,11 +262,6 @@ export default async function PostDetailPage({
       </div>
       {/* End Blog Article */}
 
-      <RelatedPosts posts={relatedPosts} />
-
-      {/* Latest Posts Carousel */}
-      <LatestPostsCarousel posts={latestPosts} />
-
       {/* Sticky Share Group */}
       <div className="sticky bottom-6 inset-x-0 text-center z-50">
         <div className="inline-block bg-background border border-border shadow-lg rounded-full py-3 px-4">
@@ -297,6 +292,11 @@ export default async function PostDetailPage({
         </div>
       </div>
       {/* End Sticky Share Group */}
+
+            <RelatedPosts posts={relatedPosts} />
+
+      {/* Latest Posts Carousel */}
+      <LatestPostsCarousel posts={latestPosts} />
     </>
   );
 }

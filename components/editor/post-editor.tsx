@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
@@ -49,6 +50,7 @@ const defaultValues: PostFormValues = {
 };
 
 export function PostEditor({ post }: Props) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
@@ -103,10 +105,17 @@ export function PostEditor({ post }: Props) {
           status === "published" ? "Artikel dipublish" : "Draft tersimpan"
         );
         setLastSaved(new Date());
-        form.reset({
-          ...validated,
-          id: result.post.id,
-        });
+
+        // Redirect to dashboard if it's a new post
+        if (result.isNewPost) {
+          router.push("/dashboard");
+        } else {
+          // Update form with saved post ID
+          form.reset({
+            ...validated,
+            id: result.post.id,
+          });
+        }
       } catch (error) {
         console.error("Save post error:", error);
 

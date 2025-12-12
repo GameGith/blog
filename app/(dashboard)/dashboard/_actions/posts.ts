@@ -20,7 +20,10 @@ export async function savePostAction(values: PostFormValues) {
   const post = await upsertPost(payload);
   revalidatePath("/dashboard");
   revalidatePath("/");
-  return { success: true, post };
+
+  // Return post data and redirect flag for new posts
+  const isNewPost = !values.id || values.id.length === 0;
+  return { success: true, post, isNewPost };
 }
 
 export async function deletePostAction(id: string) {

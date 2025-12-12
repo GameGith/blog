@@ -17,7 +17,33 @@ export async function getCategoriesAction() {
     throw new Error(error.message);
   }
 
-  return { categories: (data ?? []) as Category[] };
+  // Get post counts for each category
+  const { data: postCounts, error: countsError } = await supabase
+    .from("posts")
+    .select("category_id", { count: "exact" })
+    .eq("status", "published");
+
+  if (countsError) {
+    console.error("Error fetching post counts:", countsError);
+  }
+
+  // Create a map of category_id -> post count
+  const countMap = new Map<string, number>();
+  postCounts?.forEach((post) => {
+    if (post.category_id) {
+      countMap.set(post.category_id, (countMap.get(post.category_id) || 0) + 1);
+    }
+  });
+
+  // Add post count to each category
+  const categoriesWithCount = (data ?? []).map((cat) => ({
+    ...cat,
+    postCount: countMap.get(cat.id) || 0,
+  }));
+
+  return {
+    categories: categoriesWithCount as Array<Category & { postCount: number }>,
+  };
 }
 
 export async function createCategoryAction(input: {

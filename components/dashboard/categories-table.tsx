@@ -53,7 +53,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type Props = {
-  categories: Category[];
+  categories: Array<Category & { postCount?: number }>;
 };
 
 export function CategoriesTable({ categories }: Props) {
@@ -99,6 +99,9 @@ export function CategoriesTable({ categories }: Props) {
                   <TableHead className="hidden lg:table-cell">
                     Deskripsi
                   </TableHead>
+                  <TableHead className="hidden sm:table-cell">
+                    Artikel
+                  </TableHead>
                   <TableHead className="hidden md:table-cell">Dibuat</TableHead>
                   <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
@@ -114,6 +117,11 @@ export function CategoriesTable({ categories }: Props) {
                     </TableCell>
                     <TableCell className="hidden lg:table-cell max-w-xs truncate text-sm text-muted-foreground">
                       {category.description || "-"}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell text-sm">
+                      <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                        {category.postCount || 0}
+                      </span>
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
                       {formatDistanceToNow(new Date(category.created_at), {
@@ -149,7 +157,7 @@ export function CategoriesTable({ categories }: Props) {
                 ))}
                 {categories.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-sm">
+                    <TableCell colSpan={6} className="text-center text-sm">
                       Belum ada kategori
                     </TableCell>
                   </TableRow>

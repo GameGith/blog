@@ -215,6 +215,29 @@ export const getDashboardStats = cache(async (): Promise<DashboardStats> => {
   return stats;
 });
 
+export const getTotalTags = cache(async (): Promise<number> => {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("tags")
+    .eq("status", "published");
+
+  if (error) {
+    console.error("Error fetching tags:", error);
+    return 0;
+  }
+
+  // Extract all unique tags from all posts
+  const allTags = new Set<string>();
+  data?.forEach((post) => {
+    if (post.tags && Array.isArray(post.tags)) {
+      post.tags.forEach((tag: string) => allTags.add(tag));
+    }
+  });
+
+  return allTags.size;
+});
+
 export async function upsertPost(input: PostFormValues) {
   const supabase = await createSupabaseServerClient();
   const parsed = postSchema.parse(input);
