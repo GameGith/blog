@@ -68,6 +68,23 @@ export const getPublishedPosts = cache(async () => {
   return normalizePosts(data ?? []);
 });
 
+export const getLatestPosts = cache(async (limit: number = 10) => {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_WITH_AUTHOR)
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return normalizePosts(data ?? []);
+});
+
 /**
  * Versi build-time dari getPublishedPosts
  * Digunakan untuk generateStaticParams dan operasi build-time lainnya

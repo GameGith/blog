@@ -9,6 +9,7 @@ import {
   getPostBySlug,
   getPublishedPostsForBuild,
   getRelatedPosts,
+  getLatestPosts,
 } from "@/lib/data/posts";
 import { MDXRenderer } from "@/lib/mdx";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,7 @@ import { ShareButtons } from "@/components/blog/share-buttons";
 import { LikeButton } from "@/components/blog/like-button";
 import { ViewCounter } from "@/components/blog/view-counter";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import { LatestPostsCarousel } from "@/components/blog/latest-posts-carousel";
 import { getImageUrl } from "@/lib/utils";
 
 type Params = {
@@ -88,6 +90,7 @@ export default async function PostDetailPage({
   }
 
   const relatedPosts = await getRelatedPosts(slug);
+  const latestPosts = await getLatestPosts(10);
 
   const authorName =
     post.author?.display_name ?? post.author?.email ?? "Penulis tamu";
@@ -117,9 +120,7 @@ export default async function PostDetailPage({
 
   const displayDate = isEdited ? updatedDate : publishedDate;
 
-  const postUrl = `${
-    process.env.NEXT_PUBLIC_SITE_URL
-  }/posts/${post.slug}`;
+  const postUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/posts/${post.slug}`;
 
   return (
     <>
@@ -262,6 +263,9 @@ export default async function PostDetailPage({
       {/* End Blog Article */}
 
       <RelatedPosts posts={relatedPosts} />
+
+      {/* Latest Posts Carousel */}
+      <LatestPostsCarousel posts={latestPosts} />
 
       {/* Sticky Share Group */}
       <div className="sticky bottom-6 inset-x-0 text-center z-50">
