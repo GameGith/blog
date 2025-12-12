@@ -31,16 +31,26 @@ create table if not exists public.posts (
   category_id uuid references public.categories (id) on delete set null,
   status text not null default 'draft' check (status in ('draft', 'published')),
   author_id uuid references public.profiles (id) on delete set null,
-  views integer default 0,
-  likes integer default 0,
   published_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
+-- Tabel terpisah untuk interactions (views & likes)
+create table if not exists public.post_interactions (
+  id uuid primary key default extensions.uuid_generate_v4(),
+  post_id uuid not null references public.posts (id) on delete cascade,
+  views integer not null default 0,
+  likes integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(post_id)
+);
+
 create index if not exists posts_slug_idx on public.posts (slug);
 create index if not exists posts_status_idx on public.posts (status);
 create index if not exists posts_category_idx on public.posts (category_id);
+create index if not exists post_interactions_post_idx on public.post_interactions (post_id);
 
 create or replace function public.handle_posts_updated_at()
 returns trigger
@@ -109,6 +119,7 @@ end $$;
 alter table public.posts enable row level security;
 alter table public.profiles enable row level security;
 alter table public.categories enable row level security;
+alter table public.post_interactions enable row level security;
 
 create policy "Public can read published posts"
   on public.posts
@@ -119,6 +130,21 @@ create policy "Admins can manage posts"
   on public.posts
   for all
   using ( auth.role() = 'authenticated' );
+
+create policy "Public can read post interactions"
+  on public.post_interactions
+  for select
+  using ( true );
+
+create policy "Anyone can increment interactions"
+  on public.post_interactions
+  for insert
+  with check ( true );
+
+create policy "Anyone can update interactions"
+  on public.post_interactions
+  for update
+  using ( true );
 
 create policy "Public profiles readable"
   on public.profiles

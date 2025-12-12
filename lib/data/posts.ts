@@ -24,7 +24,33 @@ const POST_WITH_AUTHOR = `*,
     description,
     created_at,
     updated_at
+  ),
+  post_interactions!post_interactions_post_id_fkey(
+    id,
+    post_id,
+    views,
+    likes,
+    created_at,
+    updated_at
   )` as const;
+
+// Helper function to normalize post data with interactions
+function normalizePost(post: any): BlogPost {
+  const interaction = Array.isArray(post.post_interactions)
+    ? post.post_interactions[0]
+    : post.post_interactions;
+
+  return {
+    ...post,
+    views: interaction?.views || 0,
+    likes: interaction?.likes || 0,
+    post_interactions: interaction || null,
+  };
+}
+
+function normalizePosts(posts: any[]): BlogPost[] {
+  return posts.map(normalizePost);
+}
 
 export const getPublishedPosts = cache(async () => {
   const supabase = await createSupabaseServerClient();
@@ -39,7 +65,7 @@ export const getPublishedPosts = cache(async () => {
     throw new Error(error.message);
   }
 
-  return (data ?? []) as BlogPost[];
+  return normalizePosts(data ?? []);
 });
 
 /**
@@ -60,7 +86,7 @@ export async function getPublishedPostsForBuild() {
     throw new Error(error.message);
   }
 
-  return (data ?? []) as BlogPost[];
+  return normalizePosts(data ?? []);
 }
 
 export const getAllPosts = cache(async () => {
@@ -74,7 +100,7 @@ export const getAllPosts = cache(async () => {
     throw new Error(error.message);
   }
 
-  return (data ?? []) as BlogPost[];
+  return normalizePosts(data ?? []);
 });
 
 export const getPostBySlug = cache(async (slug: string) => {
@@ -89,7 +115,7 @@ export const getPostBySlug = cache(async (slug: string) => {
     return null;
   }
 
-  return data as BlogPost;
+  return data ? normalizePost(data) : null;
 });
 
 export const getPostById = cache(async (id: string) => {
@@ -104,7 +130,7 @@ export const getPostById = cache(async (id: string) => {
     return null;
   }
 
-  return data as BlogPost;
+  return data ? normalizePost(data) : null;
 });
 
 export const getPostsByCategory = cache(async (slug: string) => {
@@ -229,23 +255,25 @@ export async function upsertPost(input: PostFormValues) {
     author_id: session.user?.id ?? null,
   };
 
-  // Generate random stats for new posts
-  // Likes: 0 - 500
-  // Views: 500 - 1000
-  const insertPayload = {
-    ...base,
-    likes: Math.floor(Math.random() * 501),
-    views: Math.floor(Math.random() * (1000 - 500 + 1)) + 500,
-  };
-
   const query = postId
     ? supabase.from("posts").update(base).eq("id", postId).select().single()
-    : supabase.from("posts").insert(insertPayload).select().single();
+    : supabase.from("posts").insert(base).select().single();
 
   const { data, error } = await query;
 
   if (error) {
     throw new Error(error.message);
+  }
+
+  if (!postId && data) {
+    const randomLikes = Math.floor(Math.random() * 501);
+    const randomViews = Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+
+    await supabase.from("post_interactions").insert({
+      post_id: data.id,
+      views: randomViews,
+      likes: randomLikes,
+    });
   }
 
   return data as BlogPost;
@@ -276,6 +304,6 @@ export const getRelatedPosts = cache(async (currentSlug: string, limit = 6) => {
   }
 
   // Shuffle array
-  const shuffled = (data || []).sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, limit) as BlogPost[];
+  const shuffled = normalizePosts(data || []).sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, limit);
 });

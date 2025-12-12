@@ -20,6 +20,15 @@ export type Category = {
   updated_at: string;
 };
 
+export type PostInteraction = {
+  id: string;
+  post_id: string;
+  views: number;
+  likes: number;
+  created_at: string;
+  updated_at: string;
+};
+
 export type BlogPost = {
   id: string;
   title: string;
@@ -31,13 +40,15 @@ export type BlogPost = {
   category_id: string | null;
   category?: Category | null;
   status: PostStatus;
-  views: number;
-  likes: number;
   published_at: string | null;
   created_at: string;
   updated_at: string;
   author_id: string | null;
   author?: Profile | null;
+  post_interactions?: PostInteraction | null;
+  // Computed fields for backward compatibility
+  views?: number;
+  likes?: number;
 };
 
 export type DashboardStats = {

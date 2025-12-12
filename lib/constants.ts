@@ -18,9 +18,6 @@ export const TAG_SUGGESTIONS = [
   "trading",
 ];
 
-export const STORAGE_BUCKET =
-  process.env.NEXT_PUBLIC_SUPABASE_BUCKET ?? "blog-media";
+export const STORAGE_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_BUCKET!;
 
-export const SIGNUP_ENABLED =
-  process.env.NEXT_PUBLIC_ENABLE_SIGNUP === "true";
-
+export const SIGNUP_ENABLED = process.env.NEXT_PUBLIC_ENABLE_SIGNUP === "true";

@@ -35,18 +35,34 @@ export async function incrementView(slug: string) {
 
   const supabase = await createSupabaseServerClient();
 
+  // Get post ID from slug
   const { data: post } = await supabase
     .from("posts")
-    .select("id, views")
+    .select("id")
     .eq("slug", slug)
     .single();
 
   if (!post) return;
 
-  await supabase
-    .from("posts")
-    .update({ views: (post.views || 0) + 1 })
-    .eq("id", post.id);
+  // Upsert post_interactions (create if not exists, update if exists)
+  const { data: interaction } = await supabase
+    .from("post_interactions")
+    .select("views")
+    .eq("post_id", post.id)
+    .single();
+
+  if (interaction) {
+    // Update existing
+    await supabase
+      .from("post_interactions")
+      .update({ views: interaction.views + 1 })
+      .eq("post_id", post.id);
+  } else {
+    // Insert new
+    await supabase
+      .from("post_interactions")
+      .insert({ post_id: post.id, views: 1, likes: 0 });
+  }
 }
 
 export async function toggleLike(slug: string, increment: boolean) {
@@ -57,24 +73,43 @@ export async function toggleLike(slug: string, increment: boolean) {
 
   const supabase = await createSupabaseServerClient();
 
+  // Get post ID
   const { data: post } = await supabase
     .from("posts")
-    .select("id, likes")
+    .select("id")
     .eq("slug", slug)
     .single();
 
   if (!post) return { error: "Post not found" };
 
-  const currentLikes = post.likes || 0;
-  const newLikes = increment ? currentLikes + 1 : Math.max(0, currentLikes - 1);
+  // Get or create interaction
+  const { data: interaction } = await supabase
+    .from("post_interactions")
+    .select("likes")
+    .eq("post_id", post.id)
+    .single();
 
-  const { error } = await supabase
-    .from("posts")
-    .update({ likes: newLikes })
-    .eq("id", post.id);
+  if (interaction) {
+    // Update existing
+    const newLikes = increment
+      ? interaction.likes + 1
+      : Math.max(0, interaction.likes - 1);
 
-  if (error) return { error: error.message };
+    await supabase
+      .from("post_interactions")
+      .update({ likes: newLikes })
+      .eq("post_id", post.id);
 
-  revalidatePath(`/posts/${slug}`);
-  return { likes: newLikes };
+    revalidatePath(`/posts/${slug}`);
+    return { likes: newLikes };
+  } else {
+    // Create new interaction
+    const initialLikes = increment ? 1 : 0;
+    await supabase
+      .from("post_interactions")
+      .insert({ post_id: post.id, views: 0, likes: initialLikes });
+
+    revalidatePath(`/posts/${slug}`);
+    return { likes: initialLikes };
+  }
 }
