@@ -28,6 +28,7 @@ type Props = {
   displayName?: string | null;
   email?: string | null;
   avatarUrl?: string | null;
+  role?: string | null;
 };
 
 export function UserNavButton({
@@ -35,11 +36,13 @@ export function UserNavButton({
   displayName,
   email,
   avatarUrl,
+  role: userRole,
 }: Props) {
   const router = useRouter();
   const { client } = useSupabase();
   const [pending, startTransition] = useTransition();
-  const role = (session.user.app_metadata?.role as string) ?? "editor";
+  const role =
+    userRole ?? (session.user.app_metadata?.role as string) ?? "user";
   const isAdmin = role === "admin";
 
   const handleSignOut = () => {

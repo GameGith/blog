@@ -167,6 +167,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                   displayName={profile?.display_name}
                   email={profile?.email}
                   avatarUrl={profile?.avatar_url}
+                  role={profile?.role}
                 />
               ) : (
                 <Link href="/login">
@@ -308,7 +309,6 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: navItems.length * 0.1 + 0.1 }}
-  
                     onClick={() => {
                       window.toggleCommandMenu?.();
                       setIsMobileMenuOpen(false);
