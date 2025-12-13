@@ -35,7 +35,7 @@ export function LatestPostsSection({ posts }: Props) {
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-3">
         <h2 className="text-2xl font-bold tracking-tight">Artikel Terbaru</h2>
-        <div className="h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+        <div className="h-px flex-1 bg-linear-to-r from-border to-transparent" />
       </div>
 
       <motion.div

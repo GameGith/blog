@@ -23,7 +23,7 @@ export default async function SignupPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-background to-background/70 px-4 py-10">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-linear-to-b from-background to-background/70 px-4 py-10">
       <div className="absolute right-6 top-6">
         <ThemeToggle />
       </div>
@@ -54,4 +54,3 @@ export default async function SignupPage() {
     </div>
   );
 }
-

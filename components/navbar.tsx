@@ -55,7 +55,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
           }}
         >
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5" />
+          <div className="absolute inset-0 bg-linear-to-r from-white/5 via-white/10 to-white/5" />
 
           <div className="relative flex items-center gap-6">
             {/* Logo */}
@@ -74,16 +74,19 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                 />
               </div>
               <motion.span
-                animate={{ opacity: isScrolled ? 0 : 1, width: isScrolled ? 0 : "auto" }}
+                animate={{
+                  opacity: isScrolled ? 0 : 1,
+                  width: isScrolled ? 0 : "auto",
+                }}
                 transition={{ duration: 0.3 }}
-                className="overflow-hidden whitespace-nowrap bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-sm font-semibold text-transparent"
+                className="overflow-hidden whitespace-nowrap bg-linear-to-r from-teal-400 to-emerald-400 bg-clip-text text-sm font-semibold text-transparent"
               >
                 Mubarrok
               </motion.span>
             </Link>
 
             {/* Divider */}
-            <div className="h-6 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+            <div className="h-6 w-[1px] bg-linear-to-b from-transparent via-white/20 to-transparent" />
 
             {/* Nav Items */}
             <div className="flex items-center gap-1">
@@ -106,8 +109,12 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                       {isActive && (
                         <motion.div
                           layoutId="activeTab"
-                          className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-500/20 to-emerald-500/20"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                          className="absolute inset-0 rounded-full bg-linear-to-r from-teal-500/20 to-emerald-500/20"
+                          transition={{
+                            type: "spring",
+                            bounce: 0.2,
+                            duration: 0.6,
+                          }}
                         />
                       )}
                       <div className="relative flex items-center gap-2">
@@ -121,7 +128,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                         <span
                           className={`text-sm font-medium transition-colors ${
                             isActive
-                              ? "bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent"
+                              ? "bg-linear-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent"
                               : "text-gray-300 hover:text-white"
                           }`}
                         >
@@ -135,14 +142,13 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
             </div>
 
             {/* Divider */}
-            <div className="h-6 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+            <div className="h-6 w-[1px] bg-linear-to-b from-transparent via-white/20 to-transparent" />
 
             {/* Actions */}
             <div className="flex items-center gap-2">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                // @ts-ignore
                 onClick={() => window.toggleCommandMenu?.()}
                 className="group flex items-center gap-2 rounded-full bg-white/5 px-3 py-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
                 title="Cari (Ctrl+K)"
@@ -154,7 +160,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
               </motion.button>
 
               <ThemeToggle />
-              
+
               {session ? (
                 <UserNavButton
                   session={session}
@@ -200,7 +206,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                   priority
                 />
               </div>
-              <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-sm font-semibold text-transparent">
+              <span className="bg-linear-to-r from-teal-400 to-emerald-400 bg-clip-text text-sm font-semibold text-transparent">
                 Mubarrok
               </span>
             </Link>
@@ -209,7 +215,6 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
             <div className="flex items-center gap-2">
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                // @ts-ignore
                 onClick={() => window.toggleCommandMenu?.()}
                 className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
               >
@@ -260,7 +265,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                           }}
                           className={`flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
                             isActive
-                              ? "bg-gradient-to-r from-teal-500/20 to-emerald-500/20"
+                              ? "bg-linear-to-r from-teal-500/20 to-emerald-500/20"
                               : "hover:bg-white/5"
                           }`}
                         >
@@ -272,7 +277,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                           <span
                             className={`font-medium ${
                               isActive
-                                ? "bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent"
+                                ? "bg-linear-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent"
                                 : "text-gray-300"
                             }`}
                           >
@@ -303,7 +308,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: navItems.length * 0.1 + 0.1 }}
-                    // @ts-ignore
+  
                     onClick={() => {
                       window.toggleCommandMenu?.();
                       setIsMobileMenuOpen(false);

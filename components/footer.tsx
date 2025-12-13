@@ -5,7 +5,6 @@ import {
   Mail,
   Github,
   Twitter,
-  Linkedin,
   Instagram,
   ArrowRight,
 } from "lucide-react";
@@ -67,7 +66,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-border/40 bg-gradient-to-b from-background via-background/95 to-background/80 backdrop-blur">
+    <footer className="relative border-t border-border/40 bg-linear-to-b from-background via-background/95 to-background/80 backdrop-blur">
       {/* Background decoration */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
@@ -76,7 +75,7 @@ export function Footer() {
 
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
-        <div className="relative mb-16 overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-br from-teal-500/10 via-primary/5 to-emerald-500/10 p-8 sm:p-10">
+        <div className="relative mb-16 overflow-hidden rounded-2xl border border-border/40 bg-linear-to-br from-teal-500/10 via-primary/5 to-emerald-500/10 p-8 sm:p-10">
           {/* Decorative elements */}
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-teal-500/20 blur-3xl" />
           <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-3xl" />
@@ -87,7 +86,7 @@ export function Footer() {
                 <Mail className="h-3.5 w-3.5" />
                 Newsletter
               </div>
-              <h3 className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-2xl font-bold text-transparent">
+              <h3 className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-2xl font-bold text-transparent">
                 Dapatkan artikel terbaru
               </h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
@@ -98,7 +97,7 @@ export function Footer() {
             </div>
             <Link
               href="/profiles"
-              className="group inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:gap-3 hover:shadow-xl hover:shadow-teal-500/30"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-xl bg-linear-to-r from-teal-600 to-emerald-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:gap-3 hover:shadow-xl hover:shadow-teal-500/30"
             >
               Subscribe
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -113,7 +112,7 @@ export function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <div className="mb-4">
-              <h2 className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-xl font-bold text-transparent">
+              <h2 className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-xl font-bold text-transparent">
                 Mubarrok
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">

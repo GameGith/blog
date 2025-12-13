@@ -27,7 +27,7 @@ export function HeroSection() {
   }, [topics.length]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/40 bg-gradient-to-b from-background/80 via-primary/5 to-background/60 p-8 shadow-2xl">
+    <div className="relative overflow-hidden rounded-3xl border border-border/40 bg-linear-to-b from-background/80 via-primary/5 to-background/60 p-8 shadow-2xl">
       <div className="max-w-3xl space-y-6">
         <motion.p
           initial={{ opacity: 0, y: 8 }}
@@ -52,7 +52,7 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="inline-block bg-gradient-to-r from-primary via-accent to-primary/80 bg-clip-text text-transparent animate-gradient"
+                className="inline-block bg-linear-to-r from-primary via-accent to-primary/80 bg-clip-text text-transparent animate-gradient"
               >
                 {topics[currentTopicIndex]}
               </motion.span>

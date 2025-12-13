@@ -18,7 +18,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-background to-background/70 px-4 py-10">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-linear-to-b from-background to-background/70 px-4 py-10">
       <Card className="w-full max-w-md border-border/40 shadow-2xl backdrop-blur">
         <CardHeader className="space-y-2 text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -47,4 +47,3 @@ export default async function LoginPage() {
     </div>
   );
 }
-

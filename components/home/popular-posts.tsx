@@ -66,8 +66,8 @@ export function PopularPosts({ posts }: PopularPostsProps) {
   const canGoNext = currentIndex < maxIndex;
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mb-8 flex items-center justify-between">
+    <section className="flex flex-col gap-8">
+      <div className="flex items-end justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">🔥 Most Popular</h2>
           <p className="text-sm text-muted-foreground">
@@ -196,7 +196,7 @@ export function PopularPosts({ posts }: PopularPostsProps) {
           >
             <Link
               href="/posts"
-              className="group flex h-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border/40 bg-linear-to-br from-primary/5 via-primary/10 to-transparent p-8 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="group flex h-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border/40 bg-linear-to-br from-primary/5 via-primary/10 to-transparent p-6 sm:p-8 transition-all hover:border-primary/50 hover:shadow-lg"
             >
               <div className="rounded-full bg-primary/10 p-4 transition-transform group-hover:scale-110">
                 <ArrowRight className="h-8 w-8 text-primary" />

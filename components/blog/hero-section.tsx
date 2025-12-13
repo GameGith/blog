@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Search } from "lucide-react";
+import { BookOpen, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/40 bg-gradient-to-b from-background/80 via-primary/5 to-background/60 p-8 shadow-2xl">
+    <div className="relative overflow-hidden rounded-3xl border border-border/40 bg-linear-to-b from-background/80 via-primary/5 to-background/60 p-8 shadow-2xl">
       <div className="max-w-3xl space-y-6">
         <motion.p
           initial={{ opacity: 0, y: 8 }}
