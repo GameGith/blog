@@ -238,6 +238,56 @@ export const getTotalTags = cache(async (): Promise<number> => {
   return allTags.size;
 });
 
+export const getPopularPosts = cache(async (limit: number = 6) => {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_WITH_AUTHOR)
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const normalized = normalizePosts(data ?? []);
+
+  // Sort by likes (most liked first)
+  const sorted = normalized.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+
+  return sorted.slice(0, limit);
+});
+
+export const getTopTags = cache(async (limit: number = 8) => {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("tags")
+    .eq("status", "published");
+
+  if (error) {
+    console.error("Error fetching tags:", error);
+    return [];
+  }
+
+  // Count tag occurrences
+  const tagCounts = new Map<string, number>();
+  data?.forEach((post) => {
+    if (post.tags && Array.isArray(post.tags)) {
+      post.tags.forEach((tag: string) => {
+        tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+      });
+    }
+  });
+
+  // Sort by count and return top N
+  return Array.from(tagCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([name, count]) => ({ name, count }));
+});
+
 export async function upsertPost(input: PostFormValues) {
   const supabase = await createSupabaseServerClient();
   const parsed = postSchema.parse(input);

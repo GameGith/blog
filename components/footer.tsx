@@ -45,12 +45,12 @@ const socialLinks = [
     href: "https://twitter.com/hsnmbrr",
     ariaLabel: "Twitter",
   },
-  {
-    name: "LinkedIn",
-    icon: Linkedin,
-    href: "https://linkedin.com/in/mubarrok",
-    ariaLabel: "LinkedIn",
-  },
+  // {
+  //   name: "LinkedIn",
+  //   icon: Linkedin,
+  //   href: "https://linkedin.com/in/mubarrok",
+  //   ariaLabel: "LinkedIn",
+  // },
   {
     name: "Instagram",
     icon: Instagram,
@@ -60,7 +60,7 @@ const socialLinks = [
   {
     name: "Email",
     icon: Mail,
-    href: "mailto:mubarrok@example.com",
+    href: "mailto:husni@mubarrok.my.id",
     ariaLabel: "Email",
   },
 ];
@@ -76,21 +76,33 @@ export function Footer() {
 
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
-        <div className="mb-16 rounded-2xl border border-border/40 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-8 sm:p-10">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold">
+        <div className="relative mb-16 overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-br from-teal-500/10 via-primary/5 to-emerald-500/10 p-8 sm:p-10">
+          {/* Decorative elements */}
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-teal-500/20 blur-3xl" />
+          <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-3xl" />
+
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex-1 space-y-3">
+              <div className="inline-flex items-center gap-2 rounded-full bg-teal-500/10 px-3 py-1 text-xs font-medium text-teal-600 dark:text-teal-400">
+                <Mail className="h-3.5 w-3.5" />
+                Newsletter
+              </div>
+              <h3 className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-2xl font-bold text-transparent">
                 Dapatkan artikel terbaru
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 Subscribe untuk mendapatkan notifikasi artikel baru langsung ke
-                inbox Anda
+                inbox Anda. Update mingguan tentang AI, Web3, dan teknologi
+                terkini.
               </p>
             </div>
-            <button className="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground transition-all hover:gap-3 hover:bg-primary/90">
+            <Link
+              href="/profiles"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:gap-3 hover:shadow-xl hover:shadow-teal-500/30"
+            >
               Subscribe
-              <ArrowRight className="h-4 w-4" />
-            </button>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </div>
 

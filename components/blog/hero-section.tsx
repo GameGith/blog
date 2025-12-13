@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, UserPlus } from "lucide-react";
+import { ArrowRight, BookOpen, Search } from "lucide-react";
 
-import { SIGNUP_ENABLED } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
@@ -44,29 +43,17 @@ export function HeroSection() {
           className="flex flex-wrap gap-3"
         >
           <Button asChild size="lg" className="gap-2">
-            <Link href="/dashboard">
-              Buka dashboard <ArrowRight className="h-4 w-4" />
+            <Link href="/posts">
+              <BookOpen className="h-4 w-4" />
+              Jelajahi Artikel
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="gap-2">
-            <Link href="/login">
-              <Shield className="h-4 w-4" />
-              Masuk admin
+            <Link href="/posts">
+              <Search className="h-4 w-4" />
+              Cari Topik
             </Link>
           </Button>
-          {SIGNUP_ENABLED && (
-            <Button
-              asChild
-              variant="secondary"
-              size="lg"
-              className="gap-2 border border-dashed"
-            >
-              <Link href="/signup">
-                <UserPlus className="h-4 w-4" />
-                Daftar kontributor
-              </Link>
-            </Button>
-          )}
         </motion.div>
       </div>
     </div>

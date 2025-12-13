@@ -51,13 +51,14 @@ export function SignupForm() {
             id: userId,
             display_name: name,
             email,
+            role: "user",
           },
-          { onConflict: "id" },
+          { onConflict: "id" }
         );
       }
 
       toast.success(
-        "Akun dibuat! Silakan cek email untuk verifikasi dan kemudian login.",
+        "Akun dibuat! Silakan cek email untuk verifikasi dan kemudian login."
       );
       router.push("/login");
     } catch (error) {
@@ -112,4 +113,3 @@ export function SignupForm() {
     </form>
   );
 }
-

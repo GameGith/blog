@@ -2,7 +2,13 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Settings, User, LayoutDashboard, FileEdit } from "lucide-react";
+import {
+  LogOut,
+  Settings,
+  User,
+  LayoutDashboard,
+  FileEdit,
+} from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -24,10 +30,17 @@ type Props = {
   avatarUrl?: string | null;
 };
 
-export function UserNavButton({ session, displayName, email, avatarUrl }: Props) {
+export function UserNavButton({
+  session,
+  displayName,
+  email,
+  avatarUrl,
+}: Props) {
   const router = useRouter();
   const { client } = useSupabase();
   const [pending, startTransition] = useTransition();
+  const role = (session.user.app_metadata?.role as string) ?? "editor";
+  const isAdmin = role === "admin";
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -75,7 +88,7 @@ export function UserNavButton({ session, displayName, email, avatarUrl }: Props)
               />
             </div>
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-teal-500/20 to-emerald-500/20 text-xs font-semibold text-teal-400 ring-2 ring-white/10 hover:ring-teal-400/50 transition-all">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-teal-500/20 to-emerald-500/20 text-xs font-semibold text-teal-400 ring-2 ring-white/10 hover:ring-teal-400/50 transition-all">
               {initials || "U"}
             </div>
           )}
@@ -91,35 +104,41 @@ export function UserNavButton({ session, displayName, email, avatarUrl }: Props)
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {isAdmin && (
+          <>
+            <DropdownMenuItem
+              onClick={() => router.push("/dashboard")}
+              className="cursor-pointer"
+            >
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push("/dashboard/editor")}
+              className="cursor-pointer"
+            >
+              <FileEdit className="mr-2 h-4 w-4" />
+              <span>Tulis Baru</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem
-          onClick={() => router.push("/dashboard")}
-          className="cursor-pointer"
-        >
-          <LayoutDashboard className="mr-2 h-4 w-4" />
-          <span>Dashboard</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => router.push("/dashboard/editor")}
-          className="cursor-pointer"
-        >
-          <FileEdit className="mr-2 h-4 w-4" />
-          <span>Tulis Baru</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => router.push("/dashboard/profile")}
+          onClick={() => router.push("/profiles")}
           className="cursor-pointer"
         >
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => router.push("/dashboard/settings")}
-          className="cursor-pointer"
-        >
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
-        </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem
+            onClick={() => router.push("/dashboard/settings")}
+            className="cursor-pointer"
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleSignOut}

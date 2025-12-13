@@ -13,12 +13,27 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   display_name text,
   email text unique,
-  role text not null default 'editor',
+  role text not null default 'user',
+  newsletter_subscribed boolean not null default false,
   avatar_url text,
   bio text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Ensure newsletter_subscribed exists for existing deployments
+do $$
+begin
+  if not exists (
+    select 1 from information_schema.columns 
+    where table_schema = 'public' 
+      and table_name = 'profiles' 
+      and column_name = 'newsletter_subscribed'
+  ) then
+    alter table public.profiles
+      add column newsletter_subscribed boolean not null default false;
+  end if;
+end $$;
 
 create table if not exists public.posts (
   id uuid primary key default extensions.uuid_generate_v4(),

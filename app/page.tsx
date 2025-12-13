@@ -1,32 +1,28 @@
-"use client";
+import { HeroSection } from "@/components/home/hero-section";
+import { LatestPostsSection } from "@/components/home/latest-posts-section";
+import { PopularPosts } from "@/components/home/popular-posts";
+import { TopTags } from "@/components/home/top-tags";
+import {
+  getPublishedPosts,
+  getPopularPosts,
+  getTopTags,
+} from "@/lib/data/posts";
 
-import { HeroSection } from "@/components/blog/hero-section";
-import { PostGrid } from "@/components/blog/post-grid";
-import { PostGridSkeleton } from "@/components/blog/post-skeleton";
-import { usePosts } from "@/hooks/use-posts";
+export const revalidate = 60;
 
-export default function Home() {
-  const { posts, isLoading, isError } = usePosts();
+export default async function Home() {
+  const [posts, popularPosts, topTags] = await Promise.all([
+    getPublishedPosts(),
+    getPopularPosts(10),
+    getTopTags(10),
+  ]);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 lg:px-8">
       <HeroSection />
-
-      <div className="flex flex-col gap-8">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">Artikel Terbaru</h2>
-        </div>
-        
-        {isLoading && <PostGridSkeleton />}
-
-        {isError && (
-          <div className="rounded-2xl border border-destructive/50 bg-destructive/10 p-8 text-center text-sm text-destructive">
-            Gagal memuat artikel. Silakan refresh halaman.
-          </div>
-        )}
-
-        {!isLoading && !isError && posts && <PostGrid posts={posts} />}
-      </div>
+      <LatestPostsSection posts={posts} />
+      <PopularPosts posts={popularPosts} />
+      <TopTags tags={topTags} />
     </main>
   );
 }

@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 const profileSchema = z.object({
   display_name: z.string().min(2, "Nama minimal 2 karakter"),
@@ -32,6 +33,7 @@ const profileSchema = z.object({
     .optional()
     .or(z.literal("")),
   avatar_url: z.string().url("URL tidak valid").optional().or(z.literal("")),
+  newsletter_subscribed: z.boolean().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -42,10 +44,12 @@ type Props = {
     display_name?: string | null;
     bio?: string | null;
     avatar_url?: string | null;
+    newsletter_subscribed?: boolean | null;
   } | null;
+  redirectToAfterSave?: string;
 };
 
-export function ProfileForm({ session, profile }: Props) {
+export function ProfileForm({ session, profile, redirectToAfterSave }: Props) {
   const router = useRouter();
   const { client } = useSupabase();
   const [pending, startTransition] = useTransition();
@@ -60,6 +64,7 @@ export function ProfileForm({ session, profile }: Props) {
         "",
       bio: profile?.bio ?? "",
       avatar_url: profile?.avatar_url ?? "",
+      newsletter_subscribed: profile?.newsletter_subscribed ?? false,
     },
   });
 
@@ -73,6 +78,7 @@ export function ProfileForm({ session, profile }: Props) {
             display_name: values.display_name,
             bio: values.bio || null,
             avatar_url: values.avatar_url || null,
+            newsletter_subscribed: values.newsletter_subscribed ?? false,
           },
           { onConflict: "id" }
         );
@@ -82,7 +88,11 @@ export function ProfileForm({ session, profile }: Props) {
         }
 
         toast.success("Profile berhasil diperbarui");
-        router.refresh();
+        if (redirectToAfterSave) {
+          router.push(redirectToAfterSave);
+        } else {
+          router.refresh();
+        }
       } catch (error) {
         console.error("Profile update error:", error);
         toast.error(
@@ -125,6 +135,33 @@ export function ProfileForm({ session, profile }: Props) {
                   <FormLabel>Nama Tampilan</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="newsletter_subscribed"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Langganan Newsletter</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between rounded-md border border-border/40 p-3">
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium">
+                          Berlangganan berita terbaru
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Dapatkan update crypto, AI, dan teknologi langsung ke
+                          email Anda.
+                        </p>
+                      </div>
+                      <Switch
+                        checked={!!field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
