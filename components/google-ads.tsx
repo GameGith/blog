@@ -14,7 +14,7 @@ export function GoogleAds() {
   }, []);
 
   return (
-    <div className="my-6 flex justify-center">
+    <div className="my-6 flex justify-center" suppressHydrationWarning>
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}
@@ -38,7 +38,7 @@ export function GoogleAdsInArticle() {
   }, []);
 
   return (
-    <div className="my-8 flex justify-center">
+    <div className="my-8 flex justify-center" suppressHydrationWarning>
       <ins
         className="adsbygoogle"
         style={{ display: "block", textAlign: "center" }}
@@ -62,7 +62,7 @@ export function GoogleAdsMultiplex() {
   }, []);
 
   return (
-    <div className="my-8">
+    <div className="my-8" suppressHydrationWarning>
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}

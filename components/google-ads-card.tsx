@@ -39,6 +39,7 @@ export function GoogleAdsCard({ index }: Props) {
           // Tablet & Desktop
           "md:h-48 md:w-full md:shrink-0"
         )}
+        suppressHydrationWarning
       >
         <ins
           className="adsbygoogle"
