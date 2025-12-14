@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -10,15 +10,25 @@ type Props = {
 
 export function GoogleAdsCard({ index }: Props) {
   const isMobileBig = index % 5 === 0;
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error("AdSense error:", err);
     }
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) {
+    return <div className="h-36 md:h-48" aria-hidden />;
+  }
 
   return (
     <Card

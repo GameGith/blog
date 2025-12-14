@@ -1,17 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Display Ad - Responsive (untuk homepage banner, dll)
 export function GoogleAds() {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error("AdSense error:", err);
     }
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) {
+    return <div className="my-6" aria-hidden />;
+  }
 
   return (
     <div className="my-6 flex justify-center" suppressHydrationWarning>
@@ -28,14 +39,25 @@ export function GoogleAds() {
 
 // In-Article Ad (untuk di tengah artikel)
 export function GoogleAdsInArticle() {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error("AdSense error:", err);
     }
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) {
+    return <div className="my-8" aria-hidden />;
+  }
 
   return (
     <div className="my-8 flex justify-center" suppressHydrationWarning>
@@ -52,14 +74,25 @@ export function GoogleAdsInArticle() {
 
 // Multiplex Ad (related articles style)
 export function GoogleAdsMultiplex() {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error("AdSense error:", err);
     }
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) {
+    return <div className="my-8" aria-hidden />;
+  }
 
   return (
     <div className="my-8" suppressHydrationWarning>
