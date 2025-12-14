@@ -18,6 +18,7 @@ import { LikeButton } from "@/components/blog/like-button";
 import { ViewCounter } from "@/components/blog/view-counter";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { LatestPostsCarousel } from "@/components/blog/latest-posts-carousel";
+import { GoogleAdsInArticle } from "@/components/google-ads";
 import { getImageUrl } from "@/lib/utils";
 
 type Params = {
@@ -293,7 +294,12 @@ export default async function PostDetailPage({
       </div>
       {/* End Sticky Share Group */}
 
-            <RelatedPosts posts={relatedPosts} />
+      {/* In-Article Ad before Related Posts */}
+      <div className="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+        <GoogleAdsInArticle />
+      </div>
+
+      <RelatedPosts posts={relatedPosts} />
 
       {/* Latest Posts Carousel */}
       <LatestPostsCarousel posts={latestPosts} />

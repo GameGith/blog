@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Mail,
-  Github,
-  Twitter,
-  Instagram,
-  ArrowRight,
-} from "lucide-react";
+import { Mail, Github, Twitter, Instagram, ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const currentYear = new Date().getFullYear();
@@ -16,13 +10,15 @@ const footerLinks = {
   Navigasi: [
     { name: "Home", href: "/" },
     { name: "Semua Artikel", href: "/posts" },
-    { name: "About", href: "https://mubarrok.my.id" },
-    { name: "Dashboard", href: "/dashboard" },
+    { name: "About", href: "/about" },
+    { name: "Sign Up", href: "/signup" },
   ],
   Kategori: [
-    { name: "Teknologi", href: "/categories/teknologi" },
-    { name: "Tutorial", href: "/categories/tutorial" },
-    { name: "Berita", href: "/categories/berita" },
+    { name: "News", href: "/categories/news" },
+    { name: "Crypto", href: "/categories/crypto" },
+    { name: "Technology", href: "/categories/technology" },
+    { name: "Web3", href: "/categories/web3" },
+    { name: "AI", href: "/categories/ai" },
   ],
   Lainnya: [
     { name: "Privacy Policy", href: "/privacy-policy" },

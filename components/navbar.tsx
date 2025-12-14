@@ -11,7 +11,7 @@ import { UserNavButton } from "./user-nav-button";
 const navItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "Posts", href: "/posts", icon: BookOpen },
-  { name: "About", href: "https://mubarrok.my.id", icon: User },
+  { name: "About", href: "/about", icon: User },
 ];
 
 type NavbarProps = {

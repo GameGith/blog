@@ -95,11 +95,42 @@ export default async function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
+        {/* Google AdSense & Verification */}
+        <meta
+          name="google-site-verification"
+          content="1z6nxzO5ZPEH7I_ppn_LjjcrYswt0CwqUpoTVu3Mc4U"
+        />
+        {/* AdSense Script with Auto Ads */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7845294761182815"
           crossOrigin="anonymous"
         ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "ca-pub-7845294761182815",
+                enable_page_level_ads: true
+              });
+            `,
+          }}
+        />
+        {/* Google Analytics */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-9GQNJWLTCB"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-9GQNJWLTCB');
+            `,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col bg-background text-foreground antialiased`}
