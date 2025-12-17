@@ -2,8 +2,7 @@ import { notFound } from "next/navigation";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
+import { formatIDDate } from "@/lib/utils";
 
 import {
   getPostBySlug,
@@ -106,12 +105,10 @@ export default async function PostDetailPage({
   const readingTime = Math.ceil(post.content.split(/\s+/).length / 200);
 
   const publishedDate = post.published_at
-    ? format(new Date(post.published_at), "dd MMM yyyy, HH:mm", { locale: id })
+    ? formatIDDate(post.published_at)
     : null;
 
-  const updatedDate = post.updated_at
-    ? format(new Date(post.updated_at), "dd MMM yyyy, HH:mm", { locale: id })
-    : null;
+  const updatedDate = post.updated_at ? formatIDDate(post.updated_at) : null;
 
   const isEdited =
     post.published_at &&

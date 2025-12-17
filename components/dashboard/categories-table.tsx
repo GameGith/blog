@@ -7,35 +7,8 @@ import { id } from "date-fns/locale";
 
 import type { Category } from "@/types/category";
 import { CategoryDialog } from "@/components/dashboard/category-dialog";
-import { DeletePostDialog } from "@/components/dashboard/delete-post-dialog";
+import { DeleteCategoryDialog } from "@/components/dashboard/delete-category-dialog";
 
-// Create a type-safe wrapper for category deletion
-function DeleteCategoryDialog({
-  category,
-  open,
-  onOpenChange,
-}: {
-  category: Category | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  if (!category) return null;
-
-  // Convert category to a post-like structure for the dialog
-  const categoryAsPost = {
-    id: category.id,
-    title: category.name,
-    slug: category.slug,
-  };
-
-  return (
-    <DeletePostDialog
-      post={categoryAsPost as any}
-      open={open}
-      onOpenChange={onOpenChange}
-    />
-  );
-}
 import { Button } from "@/components/ui/button";
 import {
   Table,

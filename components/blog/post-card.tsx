@@ -9,7 +9,7 @@ import { id } from "date-fns/locale";
 import type { BlogPost } from "@/types/blog";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getImageUrl, cn } from "@/lib/utils";
+import { getImageUrl, cn, formatIDDate } from "@/lib/utils";
 
 type Props = {
   post: BlogPost;
@@ -143,9 +143,7 @@ export function PostCard({ post, index }: Props) {
           >
             <div className={cn("text-xs", !isMobileBig && "text-[10px]")}>
               {post.published_at
-                ? format(new Date(post.published_at), "dd MMM yyyy, HH:mm", {
-                    locale: id,
-                  })
+                ? formatIDDate(post.published_at) ?? "-"
                 : "Draft"}
             </div>
             <Link
