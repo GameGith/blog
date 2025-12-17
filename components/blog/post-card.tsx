@@ -3,8 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Eye, Image as ImageIcon } from "lucide-react";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
 
 import type { BlogPost } from "@/types/blog";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -44,7 +42,7 @@ export function PostCard({ post, index }: Props) {
             // Mobile
             isMobileBig ? "h-48 w-full" : "w-1/3 h-full order-last shrink-0",
             // Tablet & Desktop
-            "md:h-48 md:w-full md:order-none md:shrink-0"
+            "md:h-48 md:w-full md:order-0 md:shrink-0"
           )}
         >
           {post.cover_url ? (
@@ -54,6 +52,7 @@ export function PostCard({ post, index }: Props) {
               fill
               sizes="(max-width:768px) 100vw, 33vw"
               className="object-cover transition duration-500 group-hover:scale-105"
+              draggable={false}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-muted">

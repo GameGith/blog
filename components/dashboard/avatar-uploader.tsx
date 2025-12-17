@@ -91,7 +91,13 @@ export function AvatarUploader({ value, onChange, userId }: Props) {
     <div className="flex items-center gap-6">
       <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-border/40 bg-muted/20">
         {value ? (
-          <Image src={value} alt="Avatar" fill className="object-cover" />
+          <Image
+            src={value}
+            alt="Avatar"
+            fill
+            className="object-cover"
+            draggable={false}
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <User className="h-12 w-12 text-muted-foreground" />

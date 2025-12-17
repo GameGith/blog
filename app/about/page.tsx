@@ -1,9 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { Mail, Github, Twitter, Instagram, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
 export const metadata: Metadata = {
   title: "Tentang Kami",
   description:
@@ -58,6 +55,7 @@ export default function AboutPage() {
                   alt="IDCode Tech Blog Logo"
                   fill
                   className="object-cover"
+                  draggable={false}
                 />
               </div>
             </div>
@@ -162,7 +160,7 @@ export default function AboutPage() {
                 <h3 className="font-semibold text-lg mb-4">Informasi Kontak</h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                    <Mail className="h-5 w-5 text-primary mt-1 shrink-0" />
                     <div>
                       <p className="font-medium">Email</p>
                       <a
@@ -174,7 +172,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <ExternalLink className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                    <ExternalLink className="h-5 w-5 text-primary mt-1 shrink-0" />
                     <div>
                       <p className="font-medium">Website</p>
                       <p className="text-muted-foreground">

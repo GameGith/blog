@@ -71,6 +71,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                   height={32}
                   className="h-full w-full object-cover"
                   priority
+                  draggable={false}
                 />
               </div>
               <motion.span
@@ -86,7 +87,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
             </Link>
 
             {/* Divider */}
-            <div className="h-6 w-[1px] bg-linear-to-b from-transparent via-white/20 to-transparent" />
+            <div className="h-6 w-px bg-linear-to-b from-transparent via-white/20 to-transparent" />
 
             {/* Nav Items */}
             <div className="flex items-center gap-1">
@@ -142,7 +143,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
             </div>
 
             {/* Divider */}
-            <div className="h-6 w-[1px] bg-linear-to-b from-transparent via-white/20 to-transparent" />
+            <div className="h-6 w-px bg-linear-to-b from-transparent via-white/20 to-transparent" />
 
             {/* Actions */}
             <div className="flex items-center gap-2">
@@ -205,6 +206,7 @@ export function Navbar({ session, profile }: NavbarProps = {}) {
                   height={32}
                   className="h-full w-full object-cover"
                   priority
+                  draggable={false}
                 />
               </div>
               <span className="bg-linear-to-r from-teal-400 to-emerald-400 bg-clip-text text-sm font-semibold text-transparent">

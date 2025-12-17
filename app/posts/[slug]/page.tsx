@@ -137,6 +137,7 @@ export default async function PostDetailPage({
                     alt={authorName}
                     width={48}
                     height={48}
+                    draggable={false}
                   />
                 ) : (
                   <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">

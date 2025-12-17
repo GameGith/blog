@@ -3,12 +3,20 @@
 import { useMemo, useState, useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { id } from "date-fns/locale";
-import { MoreHorizontal, Pencil, Trash2, Upload, Download } from "lucide-react";
+import {
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  Upload,
+  Download,
+  ArrowLeft,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import type { BlogPost } from "@/types/blog";
+import type { Category } from "@/types/category";
 import { savePostAction } from "@/app/(dashboard)/dashboard/_actions/posts";
 import { DeletePostDialog } from "@/components/dashboard/delete-post-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -38,9 +46,10 @@ import {
 
 type Props = {
   posts: BlogPost[];
+  category: Category;
 };
 
-export function PostTable({ posts }: Props) {
+export function CategoryPostsTable({ posts, category }: Props) {
   const [query, setQuery] = useState("");
   const [pending, startTransition] = useTransition();
   const [deletePost, setDeletePost] = useState<BlogPost | null>(null);
@@ -97,11 +106,18 @@ export function PostTable({ posts }: Props) {
       />
       <div className="space-y-4 rounded-2xl border border-border/40 bg-card/60 p-5 shadow-lg">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">Daftar Artikel</h3>
-            <p className="text-sm text-muted-foreground">
-              Kelola draft, jadwal publish, dan arsip.
-            </p>
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" asChild className="h-9 w-9">
+              <Link href="/dashboard/categories">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            </Button>
+            <div>
+              <h3 className="text-lg font-semibold">{category.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                {filtered.length} artikel ditemukan
+              </p>
+            </div>
           </div>
           <div className="flex gap-2 flex-col sm:flex-row">
             <Select
@@ -151,47 +167,37 @@ export function PostTable({ posts }: Props) {
               <TableBody>
                 {paginatedPosts.map((post) => (
                   <TableRow key={post.id}>
-                    <TableCell className="max-w-[150px] sm:max-w-[250px] md:max-w-[350px]">
-                      <div className="flex flex-col gap-1">
-                        <span
-                          className="font-medium truncate"
-                          title={post.title}
-                        >
-                          {post.title}
-                        </span>
-                        <span className="text-xs text-muted-foreground truncate">
-                          /posts/{post.slug}
-                        </span>
-                      </div>
+                    <TableCell className="font-medium max-w-xs">
+                      <div className="truncate">{post.title}</div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <div className="flex flex-col text-sm">
-                        <span className="font-medium">
-                          {post.author?.display_name ??
-                            post.author?.email ??
-                            "Tidak diketahui"}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {post.author?.role ?? "-"}
-                        </span>
-                      </div>
+                      {post.author?.display_name ?? "Unknown"}
                     </TableCell>
                     <TableCell>
                       <Badge
                         variant={
-                          post.status === "published" ? "default" : "outline"
+                          post.status === "published" ? "default" : "secondary"
                         }
                       >
                         {post.status === "published" ? "Published" : "Draft"}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      <div className="flex flex-wrap gap-1">
-                        {post.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary">
-                            #{tag}
+                      <div className="flex gap-1 flex-wrap max-w-xs">
+                        {post.tags.slice(0, 2).map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {tag}
                           </Badge>
                         ))}
+                        {post.tags.length > 2 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{post.tags.length - 2}
+                          </Badge>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
@@ -214,29 +220,23 @@ export function PostTable({ posts }: Props) {
                               Edit
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            disabled={pending}
-                            onClick={() =>
-                              mutatePost(
-                                post,
-                                post.status === "published"
-                                  ? "draft"
-                                  : "published"
-                              )
-                            }
-                          >
-                            {post.status === "published" ? (
-                              <>
-                                <Download className="mr-2 h-4 w-4" />
-                                Unpublish
-                              </>
-                            ) : (
-                              <>
-                                <Upload className="mr-2 h-4 w-4" />
-                                Publish
-                              </>
-                            )}
-                          </DropdownMenuItem>
+                          {post.status === "draft" ? (
+                            <DropdownMenuItem
+                              disabled={pending}
+                              onClick={() => mutatePost(post, "published")}
+                            >
+                              <Upload className="mr-2 h-4 w-4" />
+                              Publish
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem
+                              disabled={pending}
+                              onClick={() => mutatePost(post, "draft")}
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              Unpublish
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem
                             className="text-destructive focus:text-destructive"
                             onClick={() => setDeletePost(post)}
@@ -251,10 +251,13 @@ export function PostTable({ posts }: Props) {
                 ))}
                 {paginatedPosts.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-sm">
+                    <TableCell
+                      colSpan={6}
+                      className="text-center py-8 text-sm text-muted-foreground"
+                    >
                       {query
-                        ? "Tidak ada hasil pencarian"
-                        : "Belum ada artikel"}
+                        ? "Tidak ada artikel yang cocok dengan pencarian"
+                        : "Belum ada artikel dalam kategori ini"}
                     </TableCell>
                   </TableRow>
                 )}
@@ -263,38 +266,63 @@ export function PostTable({ posts }: Props) {
           </div>
         </div>
 
-        {/* Pagination Controls */}
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-2">
-            <div className="text-sm text-muted-foreground text-center sm:text-left">
-              Menampilkan {(currentPage - 1) * pageSize + 1} -{" "}
-              {Math.min(currentPage * pageSize, filtered.length)} dari{" "}
-              {filtered.length} artikel
-            </div>
-            <div className="flex gap-2 justify-center">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-              >
-                <span className="hidden sm:inline">Sebelumnya</span>
-                <span className="sm:hidden">Prev</span>
-              </Button>
+          <div className="flex items-center justify-between pt-2">
+            <p className="text-sm text-muted-foreground">
+              Halaman {currentPage} dari {totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              {/* Mobile: Simple prev/next with page indicator */}
+              <div className="flex sm:hidden items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </Button>
+                <span className="text-sm text-muted-foreground px-2">
+                  {currentPage}/{totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+
+              {/* Desktop: Full pagination */}
               <div className="hidden sm:flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter((page) => {
-                    return (
-                      page === 1 ||
-                      page === totalPages ||
-                      Math.abs(page - currentPage) <= 1
-                    );
+                    if (totalPages <= 7) return true;
+                    if (page === 1 || page === totalPages) return true;
+                    if (Math.abs(page - currentPage) <= 1) return true;
+                    return false;
                   })
                   .map((page, idx, arr) => {
-                    const prev = arr[idx - 1];
+                    const prevPage = arr[idx - 1];
+                    const showEllipsis = prevPage && page - prevPage > 1;
+
                     return (
                       <div key={page} className="flex items-center gap-1">
-                        {prev && page - prev > 1 && (
+                        {showEllipsis && (
                           <span className="px-2 text-muted-foreground">
                             ...
                           </span>
@@ -303,27 +331,25 @@ export function PostTable({ posts }: Props) {
                           variant={currentPage === page ? "default" : "outline"}
                           size="sm"
                           onClick={() => setCurrentPage(page)}
+                          className="w-9"
                         >
                           {page}
                         </Button>
                       </div>
                     );
                   })}
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
               </div>
-              <div className="sm:hidden text-sm font-medium flex items-center px-3 bg-muted rounded-md">
-                {currentPage} / {totalPages}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(totalPages, p + 1))
-                }
-                disabled={currentPage === totalPages}
-              >
-                <span className="hidden sm:inline">Berikutnya</span>
-                <span className="sm:hidden">Next</span>
-              </Button>
             </div>
           </div>
         )}
